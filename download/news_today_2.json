@@ -1,0 +1,74 @@
+[
+  {
+    "url": "https://blog.csdn.net/gitblog_00156/article/details/151058003",
+    "name": "FATE联邦学习未来展望：2026年技术发展趋势与路线图完全指南",
+    "snippet": "FATE 2.0最大的突破是引入了OSX（Open Site Exchange）统一通信组件，彻底解决了1.x版本中多套通信架构并存的问题。 OSX核心特性亮点. 多协议支持：. 传输协议 ...",
+    "host_name": "blog.csdn.net",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://ccs.scu.edu.cn/info/1029/4426.htm",
+    "name": "我院个性化联邦学习领域最新研究成果被WWW 2026接收",
+    "snippet": "为了解决这一问题，张意教授团队提出了FedVPL框架，该框架通过解构传统的类别级特征表示，并采用视觉原语空间共享，显著提高了联邦学习中的特征多样性和共享 ...",
+    "host_name": "ccs.scu.edu.cn",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.mju.edu.cn/2026/0312/c1435a215560/page.htm",
+    "name": "【争优争先争效】计算机学院多项研究成果被权威会议/期刊录用",
+    "snippet": "IEEE国际计算机视觉与模式识别会议CVPR 2026录用结果揭晓，计算机学院侯晨老师、黄涛老师关于联邦学习实时梯度隐私评估与安全门控传输的研究成果被录用。",
+    "host_name": "www.mju.edu.cn",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.shanghaitech.edu.cn/2026/0304/c1001a1119597/page.htm",
+    "name": "信息学院文鼎柱团队提出FedLoDrop架构，让大模型微调更“轻”更“准”",
+    "snippet": "联邦学习（Federated Learning）作为一种分布式训练模式，成为了大模型微调的选择。但在边缘网络环境下，现有的联邦微调技术面临着两大瓶颈。一方面是 ...",
+    "host_name": "www.shanghaitech.edu.cn",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://zhuanlan.zhihu.com/p/660573898",
+    "name": "Foundation Model×Federated Learning - 联邦学习系列 - 知乎专栏",
+    "snippet": "我们可能会想过人类会缺水、缺矿物资源，但没想过会缺数据；例如下面的文章就指出我们在2026年就可能用完所有高质量语言数据。 还有文章指出，如果使用模型生成的数据（例如 ...",
+    "host_name": "zhuanlan.zhihu.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.ibm.com/cn-zh/think/topics/federated-learning",
+    "name": "什么是联邦学习？ - IBM",
+    "snippet": "联邦学习是一种训练机器学习(ML) 模型的去中心化方法。分布式网络中的每个节点都使用其本地数据训练全局模型，中央服务器聚合节点更新以改进全局模型。",
+    "host_name": "www.ibm.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.themoonlight.io/zh/review/federated-learning-driven-large-language-models-for-swarm-intelligence-a-survey",
+    "name": "[论文评述] Federated Learning driven Large Language Models for",
+    "snippet": "联邦学习为跨多个去中心化节点协作训练LLMs提供了一种框架，确保数据隐私和安全性。具体而言，在Federated Learning的实施中，各个节点在本地进行模型训练，计算梯度或其他需要 ...",
+    "host_name": "www.themoonlight.io",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://cccf.hrbeu.edu.cn/cn/article/id/586a39c5-bbbf-4872-83b2-a81b98fc418d",
+    "name": "边缘计算下的联邦学习：安全与隐私挑战",
+    "snippet": "将FL引入EC场景，能在保障系统智能性的同时，有效兼顾数据隐私性。然而，二者的深度融合也带来了复杂的安全与隐私挑战：边缘节点动态拓扑、潜在恶意行为对模型收敛的干扰，以及 ...",
+    "host_name": "cccf.hrbeu.edu.cn",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  }
+]

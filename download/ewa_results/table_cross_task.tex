@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Cross-Task EWA vs FedAvg: Expert Weight on Specialty Class}
+\label{tab:cross-task}
+\begin{tabular}{llcccc}
+\toprule
+Task & Modality & EWA (\%) & FedAvg (\%) & $\Delta$ (\%) & Rel. (\%) \\
+\midrule
+Medical NLP (ClinicalBERT) & NLP & 96.0 & 71.4 & +24.5 & 34.3 \\
+Financial NLP (FinBERT) & NLP & 94.0 & 73.3 & +20.7 & 28.2 \\
+Medical CV (Organoid, ResNet18) & CV & 91.6 & 61.1 & +30.5 & 49.9 \\
+Industrial CV (PCB Defect, ResNet18) & CV & 92.7 & 71.4 & +21.3 & 29.8 \\
+\midrule
+\textbf{NLP Avg} & & 95.0 & 72.4 & +22.6 & 31.2 \\
+\textbf{CV Avg} & & 92.2 & 66.3 & +25.9 & 39.9 \\
+\bottomrule
+\end{tabular}
+\end{table}

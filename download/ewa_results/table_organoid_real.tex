@@ -1,0 +1,15 @@
+\begin{table}[h]
+\centering
+\caption{Real FL Experiment: Organoid Classification (DINOv2 features, PCA 48-dim)}
+\label{tab:organoid_real}
+\begin{tabular}{lcc}
+\toprule
+Metric & EWA & FedAvg \\
+\midrule
+Expert Weight Share (\texttt{late\_stage}) & 89.9\% $\pm$ 11.1 & 54.6\% $\pm$ 1.7 \\
+Mean Test Accuracy & 0.96 & 0.96 \\
+Final Test Accuracy & 0.99 & 0.99 \\
+Conformity Alerts & 0 & — \\
+\bottomrule
+\end{tabular}
+\end{table}

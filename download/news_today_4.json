@@ -1,0 +1,65 @@
+[
+  {
+    "url": "https://www.bagevent.com/event/Embodied",
+    "name": "2026第四届具身智能机器人产业发展论坛 - 百格活动",
+    "snippet": "从精密产线上的机械臂，到家庭中的陪伴助手，从实验室里的前沿探索，到千行百业的务实应用——具身智能机器人正以前所未有的速度，从科幻叙事走向产业现实。",
+    "host_name": "www.bagevent.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://pdf.dfcfw.com/pdf/H3_AP202604301821804488_1.pdf?1777547745000.pdf",
+    "name": "[PDF] 中国人工智能系列白皮书—-具身智能（2026 版）",
+    "snippet": "2026 年3 月，. 智元机器人发布动作序列驱动的具身世界模型框架EVAC（EnerVerse-AC），同步开. 源全球首个具身世界模型专用评测基准EWMBench，构建了 ...",
+    "host_name": "pdf.dfcfw.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://zhuanlan.zhihu.com/p/2027305682869733046",
+    "name": "具身智能（Embodied AI）技术综述：从基础理论到工程实践 - 知乎专栏",
+    "snippet": "本文基于Every-Embodied 开源项目的丰富实践经验，系统性地综述具身智能领域的技术栈、算法演进、工程实践和前沿复现。全文涵盖：（1）具身智能的基础理论与 ...",
+    "host_name": "zhuanlan.zhihu.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://hub.baai.ac.cn/view/53570",
+    "name": "上交大穆尧：数据为王，2026具身智能迎来“数据规模化元年”丨独家",
+    "snippet": "具身智能正面临新临界点：VLA大模型能力跃升与物理世界复杂性直接碰撞。真实环境中的接触动力学、不确定性及长尾分布，暴露出当前范式结构性瓶颈——数据 ...",
+    "host_name": "hub.baai.ac.cn",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://juejin.cn/post/7615515575942545446",
+    "name": "序：Hello, Robot!具身智能（Embodied AI） - 稀土掘金",
+    "snippet": "具身智能（Embodied AI），是2026年最硬核、最性感、但也最容易让人一头雾水的赛道。 · 这篇专栏，不是新闻摘要，也不是论文复读机。 · 专栏设计逻辑：构建一个 ...",
+    "host_name": "juejin.cn",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://wudaolu.com/t/topic/19996",
+    "name": "[中国人工智能学会]中国人工智能系列白皮书——具身智能（2026版）",
+    "snippet": ":page_facing_up: 本报告深入探讨了具身智能（Embodied AI）的核心定义。具身智能被视为人工智能走向物理世界的关键路径，强调智能体必须通过物理本体与环境 ...",
+    "host_name": "wudaolu.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.engineering.org.cn/sscae/EN/PDF/1183710675747795398",
+    "name": "[PDF] 具身智能发展趋势与展望Embodied Intelligence - Engineering",
+    "snippet": "具身智能是一种基于物理实体对环境进行感知. 与适应性交互，进而理解问题、产生智能行为的智. 能系统，可以突破传统智能系统依赖静态数据表征. 的局限，是 ...",
+    "host_name": "www.engineering.org.cn",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  }
+]

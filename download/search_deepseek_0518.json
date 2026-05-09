@@ -1,0 +1,56 @@
+[
+  {
+    "url": "https://api-docs.deepseek.com/news/news260424",
+    "name": "DeepSeek V4 Preview Release",
+    "snippet": "DeepSeek-V4 Preview is officially live & open-sourced! Welcome to the era of cost-effective 1M context length.\nDeepSeek-V4 Preview Release 2026/04/24. On this page. DeepSeek V4 Preview Release. DeepSeek-V4 Preview is officially live & open-sourced!",
+    "host_name": "api-docs.deepseek.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+    "name": "deepseek-ai/DeepSeek-V4-Pro - Hugging Face",
+    "snippet": "DeepSeek-V4-Pro-Max, the maximum reasoning effort mode of DeepSeek-V4-Pro, significantly advances the knowledge capabilities of open-source ...",
+    "host_name": "huggingface.co",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.investing.com/news/stock-market-news/deepseek-releases-new-flagship-open-source-ai-model-v4-4634548",
+    "name": "DeepSeek releases new flagship open source AI model V4",
+    "snippet": "DeepSeek said V4-Pro-Max, the most advanced of its AI models, achieved “top-tier performance in coding benchmarks and significantly bridges ...",
+    "host_name": "www.investing.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://simonwillison.net/2026/apr/24/deepseek-v4",
+    "name": "DeepSeek V4—almost on the frontier, a fraction of the price",
+    "snippet": "DeepSeek V4—almost on the frontier, a fraction of the price. 24th April 2026. Chinese AI lab DeepSeek's last model release was V3.2 (and V3.2 ...",
+    "host_name": "simonwillison.net",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://o-mega.ai/articles/deepseek-v4-preview-the-complete-2026-guide",
+    "name": "DeepSeek V4 Preview: The Complete 2026 Guide - o-mega | AI",
+    "snippet": "DeepSeek V4 rivals GPT-5.5 and Claude Opus 4.7 at 10x lower cost. Everything developers need to know in this complete 2026 guide.",
+    "host_name": "o-mega.ai",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.atlascloud.ai/blog/ai-updates/what-is-deepseek-v4",
+    "name": "DeepSeek v4: Everything We Know So Far - Atlas Cloud",
+    "snippet": "Explore the confirmed DeepSeek v4 release date, mHC architecture, and Engram Memory in this ultimate guide to 2026's most powerful coding AI model.",
+    "host_name": "www.atlascloud.ai",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  }
+]

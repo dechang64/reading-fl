@@ -1,0 +1,300 @@
+{
+  "experiment": "organoid_real",
+  "n_clients": 5,
+  "n_rounds": 20,
+  "n_classes": 3,
+  "class_names": [
+    "early_stage",
+    "healthy",
+    "late_stage"
+  ],
+  "client_distributions": {
+    "0": {
+      "early_stage": 0.15,
+      "healthy": 0.2,
+      "late_stage": 0.65
+    },
+    "1": {
+      "early_stage": 0.25,
+      "healthy": 0.6,
+      "late_stage": 0.15
+    },
+    "2": {
+      "early_stage": 0.2,
+      "healthy": 0.65,
+      "late_stage": 0.15
+    },
+    "3": {
+      "early_stage": 0.25,
+      "healthy": 0.55,
+      "late_stage": 0.2
+    },
+    "4": {
+      "early_stage": 0.2,
+      "healthy": 0.6,
+      "late_stage": 0.2
+    }
+  },
+  "train_samples": {
+    "0": 160,
+    "1": 160,
+    "2": 88,
+    "3": 48,
+    "4": 24
+  },
+  "test_samples": 120,
+  "summary": {
+    "mean_test_acc": 0.99,
+    "std_test_acc": 0.013333333333333332,
+    "final_test_acc": 0.9916666666666667,
+    "final_per_class_acc": {
+      "early_stage": 0.9772727272727273,
+      "healthy": 1.0,
+      "late_stage": 1.0
+    },
+    "expert_weight_share_mean": 81.57149999999999,
+    "expert_weight_share_std": 7.616446858608022
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "test_acc": 0.9333333333333333,
+      "per_class_acc": {
+        "early_stage": 0.8181818181818182,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 86.05,
+      "avg_entropy": 0.8639500737190247,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 2,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 91.26,
+      "avg_entropy": 0.5519932508468628,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 3,
+      "test_acc": 1.0,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 90.22,
+      "avg_entropy": 0.29554322361946106,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 4,
+      "test_acc": 1.0,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 88.86,
+      "avg_entropy": 0.15669797360897064,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 5,
+      "test_acc": 1.0,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 88.2,
+      "avg_entropy": 0.07972051203250885,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 6,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 92.21,
+      "avg_entropy": 0.04590009152889252,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 7,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 81.93,
+      "avg_entropy": 0.028232796117663383,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 8,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 88.76,
+      "avg_entropy": 0.019137533381581306,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 9,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 77.46,
+      "avg_entropy": 0.012541860342025757,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 10,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 82.64,
+      "avg_entropy": 0.009679152630269527,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 11,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 84.03,
+      "avg_entropy": 0.007877078838646412,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 12,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 85.78,
+      "avg_entropy": 0.006227813195437193,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 13,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 84.49,
+      "avg_entropy": 0.005285147111862898,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 14,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 80.32,
+      "avg_entropy": 0.005407305434346199,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 15,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 77.42,
+      "avg_entropy": 0.003835353534668684,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 16,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 71.49,
+      "avg_entropy": 0.0028820091392844915,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 17,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 72.36,
+      "avg_entropy": 0.0038215150125324726,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 18,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 70.16,
+      "avg_entropy": 0.002632045652717352,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 19,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 69.95,
+      "avg_entropy": 0.002418627729639411,
+      "high_conformity_ratio": 0.0
+    },
+    {
+      "round": 20,
+      "test_acc": 0.9916666666666667,
+      "per_class_acc": {
+        "early_stage": 0.9772727272727273,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_weight_share": 67.84,
+      "avg_entropy": 0.0020078897941857576,
+      "high_conformity_ratio": 0.0
+    }
+  ]
+}

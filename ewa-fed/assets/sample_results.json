@@ -1,0 +1,527 @@
+{
+  "organoid_cv": {
+    "task_name": "Medical CV (Organoid, DINOv2+PCA)",
+    "modality": "cv",
+    "specialty": "late_stage",
+    "n_clients": 5,
+    "n_rounds": 20,
+    "n_classes": 3,
+    "class_names": [
+      "early_stage",
+      "healthy",
+      "late_stage"
+    ],
+    "dataset": "",
+    "feature_extraction": "",
+    "summary": {
+      "mean_test_acc": 0.9579,
+      "std_test_acc": 0.0749,
+      "final_test_acc": 0.9917,
+      "final_per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "ewa_expert_ws_mean": 89.92,
+      "ewa_expert_ws_std": 11.1,
+      "fedavg_expert_ws_mean": 54.63,
+      "fedavg_expert_ws_std": 1.71,
+      "delta_pp": 35.28,
+      "delta_pct": 64.6,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "test_acc": 0.6833,
+        "expert_ws_ewa": 65.95,
+        "expert_ws_fedavg": 61.71,
+        "avg_entropy": 1.0353
+      },
+      {
+        "round": 2,
+        "test_acc": 0.8167,
+        "expert_ws_ewa": 64.45,
+        "expert_ws_fedavg": 55.91,
+        "avg_entropy": 0.9753
+      },
+      {
+        "round": 3,
+        "test_acc": 0.9,
+        "expert_ws_ewa": 70.1,
+        "expert_ws_fedavg": 53.8,
+        "avg_entropy": 0.8797
+      },
+      {
+        "round": 4,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 79.65,
+        "expert_ws_fedavg": 55.11,
+        "avg_entropy": 0.7715
+      },
+      {
+        "round": 5,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 85.73,
+        "expert_ws_fedavg": 54.07,
+        "avg_entropy": 0.6433
+      },
+      {
+        "round": 6,
+        "test_acc": 0.9917,
+        "expert_ws_ewa": 92.22,
+        "expert_ws_fedavg": 53.25,
+        "avg_entropy": 0.5128
+      },
+      {
+        "round": 7,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 94.95,
+        "expert_ws_fedavg": 53.94,
+        "avg_entropy": 0.3916
+      },
+      {
+        "round": 8,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 96.43,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.2812
+      },
+      {
+        "round": 9,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 98.06,
+        "expert_ws_fedavg": 53.94,
+        "avg_entropy": 0.1986
+      },
+      {
+        "round": 10,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 99.4,
+        "expert_ws_fedavg": 54.6,
+        "avg_entropy": 0.1347
+      },
+      {
+        "round": 11,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 98.86,
+        "expert_ws_fedavg": 53.94,
+        "avg_entropy": 0.1007
+      },
+      {
+        "round": 12,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 98.89,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0781
+      },
+      {
+        "round": 13,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 98.59,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0598
+      },
+      {
+        "round": 14,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 98.32,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0466
+      },
+      {
+        "round": 15,
+        "test_acc": 0.9917,
+        "expert_ws_ewa": 97.41,
+        "expert_ws_fedavg": 53.94,
+        "avg_entropy": 0.0366
+      },
+      {
+        "round": 16,
+        "test_acc": 0.9917,
+        "expert_ws_ewa": 97.12,
+        "expert_ws_fedavg": 54.6,
+        "avg_entropy": 0.0284
+      },
+      {
+        "round": 17,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 96.83,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0255
+      },
+      {
+        "round": 18,
+        "test_acc": 0.9833,
+        "expert_ws_ewa": 84.41,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0266
+      },
+      {
+        "round": 19,
+        "test_acc": 0.9917,
+        "expert_ws_ewa": 89.0,
+        "expert_ws_fedavg": 53.94,
+        "avg_entropy": 0.0209
+      },
+      {
+        "round": 20,
+        "test_acc": 0.9917,
+        "expert_ws_ewa": 91.93,
+        "expert_ws_fedavg": 54.27,
+        "avg_entropy": 0.0197
+      }
+    ]
+  },
+  "financial_nlp": {
+    "task_name": "Financial NLP (Twitter, Sentence-Transformer)",
+    "modality": "nlp",
+    "specialty": "Bearish",
+    "n_clients": 5,
+    "n_rounds": 20,
+    "n_classes": 3,
+    "class_names": [
+      "Bearish",
+      "Bullish",
+      "Neutral"
+    ],
+    "dataset": "zeroshot/twitter-financial-news-sentiment",
+    "feature_extraction": "TF-IDF(5000) + SVD(128)",
+    "summary": {
+      "mean_test_acc": 0.7377690288713912,
+      "std_test_acc": 0.016734192675801635,
+      "final_test_acc": 0.7553805774278215,
+      "final_per_class_acc": {
+        "Bearish": 0.5671,
+        "Bullish": 0.7324,
+        "Neutral": 0.8076
+      },
+      "ewa_expert_ws_mean": 74.88749999999999,
+      "ewa_expert_ws_std": 13.120403147388421,
+      "fedavg_expert_ws_mean": 62.75250000000001,
+      "fedavg_expert_ws_std": 10.494425127180621,
+      "delta_pp": 12.1,
+      "delta_relative_pct": 19.3,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "test_acc": 0.7197,
+        "expert_ws_ewa": 85.13,
+        "expert_ws_fedavg": 84.04,
+        "avg_entropy": 0.9684
+      },
+      {
+        "round": 2,
+        "test_acc": 0.7139,
+        "expert_ws_ewa": 48.58,
+        "expert_ws_fedavg": 43.78,
+        "avg_entropy": 0.7591
+      },
+      {
+        "round": 3,
+        "test_acc": 0.7029,
+        "expert_ws_ewa": 54.94,
+        "expert_ws_fedavg": 48.96,
+        "avg_entropy": 0.6512
+      },
+      {
+        "round": 4,
+        "test_acc": 0.7155,
+        "expert_ws_ewa": 55.23,
+        "expert_ws_fedavg": 47.22,
+        "avg_entropy": 0.5923
+      },
+      {
+        "round": 5,
+        "test_acc": 0.7181,
+        "expert_ws_ewa": 61.21,
+        "expert_ws_fedavg": 52.91,
+        "avg_entropy": 0.528
+      },
+      {
+        "round": 6,
+        "test_acc": 0.7213,
+        "expert_ws_ewa": 66.69,
+        "expert_ws_fedavg": 55.44,
+        "avg_entropy": 0.499
+      },
+      {
+        "round": 7,
+        "test_acc": 0.7433,
+        "expert_ws_ewa": 63.41,
+        "expert_ws_fedavg": 54.11,
+        "avg_entropy": 0.4692
+      },
+      {
+        "round": 8,
+        "test_acc": 0.736,
+        "expert_ws_ewa": 68.33,
+        "expert_ws_fedavg": 56.93,
+        "avg_entropy": 0.4438
+      },
+      {
+        "round": 9,
+        "test_acc": 0.736,
+        "expert_ws_ewa": 69.9,
+        "expert_ws_fedavg": 56.77,
+        "avg_entropy": 0.4281
+      },
+      {
+        "round": 10,
+        "test_acc": 0.7323,
+        "expert_ws_ewa": 73.35,
+        "expert_ws_fedavg": 58.59,
+        "avg_entropy": 0.4051
+      },
+      {
+        "round": 11,
+        "test_acc": 0.7433,
+        "expert_ws_ewa": 77.32,
+        "expert_ws_fedavg": 62.5,
+        "avg_entropy": 0.3846
+      },
+      {
+        "round": 12,
+        "test_acc": 0.7407,
+        "expert_ws_ewa": 74.53,
+        "expert_ws_fedavg": 63.41,
+        "avg_entropy": 0.3695
+      },
+      {
+        "round": 13,
+        "test_acc": 0.748,
+        "expert_ws_ewa": 83.58,
+        "expert_ws_fedavg": 67.83,
+        "avg_entropy": 0.3386
+      },
+      {
+        "round": 14,
+        "test_acc": 0.7507,
+        "expert_ws_ewa": 82.6,
+        "expert_ws_fedavg": 67.22,
+        "avg_entropy": 0.3243
+      },
+      {
+        "round": 15,
+        "test_acc": 0.7564,
+        "expert_ws_ewa": 83.69,
+        "expert_ws_fedavg": 70.81,
+        "avg_entropy": 0.3029
+      },
+      {
+        "round": 16,
+        "test_acc": 0.7549,
+        "expert_ws_ewa": 88.72,
+        "expert_ws_fedavg": 71.71,
+        "avg_entropy": 0.2866
+      },
+      {
+        "round": 17,
+        "test_acc": 0.7512,
+        "expert_ws_ewa": 83.45,
+        "expert_ws_fedavg": 69.66,
+        "avg_entropy": 0.2797
+      },
+      {
+        "round": 18,
+        "test_acc": 0.7596,
+        "expert_ws_ewa": 93.35,
+        "expert_ws_fedavg": 73.67,
+        "avg_entropy": 0.248
+      },
+      {
+        "round": 19,
+        "test_acc": 0.7564,
+        "expert_ws_ewa": 90.38,
+        "expert_ws_fedavg": 74.91,
+        "avg_entropy": 0.2379
+      },
+      {
+        "round": 20,
+        "test_acc": 0.7554,
+        "expert_ws_ewa": 93.36,
+        "expert_ws_fedavg": 74.58,
+        "avg_entropy": 0.226
+      }
+    ]
+  },
+  "medical_nlp": {
+    "task_name": "Medical NLP (PubMed QA, Sentence-Transformer)",
+    "modality": "nlp",
+    "specialty": "no",
+    "n_clients": 5,
+    "n_rounds": 20,
+    "n_classes": 3,
+    "class_names": [
+      "yes",
+      "no",
+      "maybe"
+    ],
+    "dataset": "pubmed_qa (pqa_labeled)",
+    "feature_extraction": "",
+    "summary": {
+      "mean_test_acc": 0.5416,
+      "std_test_acc": 0.0432,
+      "final_test_acc": 0.5772,
+      "final_per_class_acc": {
+        "yes": 0.6625,
+        "no": 0.5577,
+        "maybe": 0.2353
+      },
+      "ewa_expert_ws_mean": 45.28,
+      "ewa_expert_ws_std": 8.51,
+      "fedavg_expert_ws_mean": 38.58,
+      "fedavg_expert_ws_std": 2.64,
+      "delta_pp": 6.7,
+      "delta_relative_pct": 17.4,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "test_acc": 0.3893,
+        "expert_ws_ewa": 35.63,
+        "expert_ws_fedavg": 35.63,
+        "avg_entropy": 1.0935
+      },
+      {
+        "round": 2,
+        "test_acc": 0.5101,
+        "expert_ws_ewa": 38.48,
+        "expert_ws_fedavg": 38.51,
+        "avg_entropy": 1.0798
+      },
+      {
+        "round": 3,
+        "test_acc": 0.5369,
+        "expert_ws_ewa": 39.16,
+        "expert_ws_fedavg": 39.1,
+        "avg_entropy": 1.0246
+      },
+      {
+        "round": 4,
+        "test_acc": 0.5101,
+        "expert_ws_ewa": 36.49,
+        "expert_ws_fedavg": 35.79,
+        "avg_entropy": 0.9292
+      },
+      {
+        "round": 5,
+        "test_acc": 0.5101,
+        "expert_ws_ewa": 38.22,
+        "expert_ws_fedavg": 36.63,
+        "avg_entropy": 0.8401
+      },
+      {
+        "round": 6,
+        "test_acc": 0.5168,
+        "expert_ws_ewa": 36.17,
+        "expert_ws_fedavg": 32.5,
+        "avg_entropy": 0.7761
+      },
+      {
+        "round": 7,
+        "test_acc": 0.5369,
+        "expert_ws_ewa": 44.7,
+        "expert_ws_fedavg": 35.29,
+        "avg_entropy": 0.6898
+      },
+      {
+        "round": 8,
+        "test_acc": 0.5168,
+        "expert_ws_ewa": 46.93,
+        "expert_ws_fedavg": 36.16,
+        "avg_entropy": 0.6195
+      },
+      {
+        "round": 9,
+        "test_acc": 0.5772,
+        "expert_ws_ewa": 53.43,
+        "expert_ws_fedavg": 36.73,
+        "avg_entropy": 0.5299
+      },
+      {
+        "round": 10,
+        "test_acc": 0.557,
+        "expert_ws_ewa": 54.05,
+        "expert_ws_fedavg": 38.91,
+        "avg_entropy": 0.4913
+      },
+      {
+        "round": 11,
+        "test_acc": 0.5436,
+        "expert_ws_ewa": 51.17,
+        "expert_ws_fedavg": 38.64,
+        "avg_entropy": 0.4258
+      },
+      {
+        "round": 12,
+        "test_acc": 0.5906,
+        "expert_ws_ewa": 45.78,
+        "expert_ws_fedavg": 38.1,
+        "avg_entropy": 0.3955
+      },
+      {
+        "round": 13,
+        "test_acc": 0.557,
+        "expert_ws_ewa": 54.49,
+        "expert_ws_fedavg": 40.28,
+        "avg_entropy": 0.3214
+      },
+      {
+        "round": 14,
+        "test_acc": 0.557,
+        "expert_ws_ewa": 37.92,
+        "expert_ws_fedavg": 39.16,
+        "avg_entropy": 0.3031
+      },
+      {
+        "round": 15,
+        "test_acc": 0.557,
+        "expert_ws_ewa": 63.78,
+        "expert_ws_fedavg": 41.46,
+        "avg_entropy": 0.2445
+      },
+      {
+        "round": 16,
+        "test_acc": 0.5772,
+        "expert_ws_ewa": 63.49,
+        "expert_ws_fedavg": 41.7,
+        "avg_entropy": 0.2086
+      },
+      {
+        "round": 17,
+        "test_acc": 0.5638,
+        "expert_ws_ewa": 42.56,
+        "expert_ws_fedavg": 41.28,
+        "avg_entropy": 0.1757
+      },
+      {
+        "round": 18,
+        "test_acc": 0.5839,
+        "expert_ws_ewa": 41.97,
+        "expert_ws_fedavg": 42.05,
+        "avg_entropy": 0.1524
+      },
+      {
+        "round": 19,
+        "test_acc": 0.5638,
+        "expert_ws_ewa": 39.22,
+        "expert_ws_fedavg": 41.75,
+        "avg_entropy": 0.1266
+      },
+      {
+        "round": 20,
+        "test_acc": 0.5772,
+        "expert_ws_ewa": 41.99,
+        "expert_ws_fedavg": 41.9,
+        "avg_entropy": 0.1182
+      }
+    ]
+  }
+}

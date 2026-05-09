@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 210mm; height: 297mm;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+    background: #050a14;
+  }
+
+  /* ── Background ── */
+  .bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(15,60,120,0.4) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(80,30,140,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 70%, rgba(0,150,180,0.12) 0%, transparent 45%),
+                linear-gradient(180deg, #050a14 0%, #0a1628 50%, #060e1c 100%);
+  }
+
+  /* DNA helix decorative lines */
+  .dna {
+    position: absolute; right: 30px; top: 0; bottom: 0; width: 80px; z-index: 2; opacity: 0.06;
+  }
+  .dna-dot {
+    position: absolute; width: 6px; height: 6px; border-radius: 50%;
+    background: #4fc3f7;
+  }
+  .dna-line {
+    position: absolute; width: 1px; background: linear-gradient(180deg, transparent, #4fc3f7, transparent);
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute; border-radius: 50%; z-index: 2;
+  }
+  .p1 { width: 4px; height: 4px; background: rgba(79,195,247,0.5); top: 12%; left: 15%; }
+  .p2 { width: 3px; height: 3px; background: rgba(124,77,255,0.4); top: 25%; right: 20%; }
+  .p3 { width: 5px; height: 5px; background: rgba(0,229,255,0.3); top: 55%; left: 8%; }
+  .p4 { width: 3px; height: 3px; background: rgba(79,195,247,0.4); top: 70%; right: 12%; }
+  .p5 { width: 4px; height: 4px; background: rgba(124,77,255,0.3); top: 85%; left: 25%; }
+  .p6 { width: 2px; height: 2px; background: rgba(0,229,255,0.5); top: 40%; left: 45%; }
+  .p7 { width: 3px; height: 3px; background: rgba(79,195,247,0.3); top: 18%; left: 70%; }
+  .p8 { width: 4px; height: 4px; background: rgba(124,77,255,0.4); top: 60%; right: 35%; }
+
+  /* Corner accents */
+  .corner { position: absolute; z-index: 5; }
+  .corner-tl { top: 32px; left: 32px; width: 40px; height: 40px; border-top: 2px solid rgba(79,195,247,0.4); border-left: 2px solid rgba(79,195,247,0.4); }
+  .corner-tr { top: 32px; right: 32px; width: 40px; height: 40px; border-top: 2px solid rgba(79,195,247,0.4); border-right: 2px solid rgba(79,195,247,0.4); }
+  .corner-bl { bottom: 32px; left: 32px; width: 40px; height: 40px; border-bottom: 2px solid rgba(124,77,255,0.3); border-left: 2px solid rgba(124,77,255,0.3); }
+  .corner-br { bottom: 32px; right: 32px; width: 40px; height: 40px; border-bottom: 2px solid rgba(124,77,255,0.3); border-right: 2px solid rgba(124,77,255,0.3); }
+
+  /* ── Content ── */
+  .content {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 60px 70px 50px;
+  }
+
+  /* Top badge */
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 20px;
+    border: 1px solid rgba(79,195,247,0.3);
+    border-radius: 20px;
+    background: rgba(79,195,247,0.06);
+    margin-bottom: 40px;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4fc3f7;
+    box-shadow: 0 0 8px rgba(79,195,247,0.6);
+  }
+  .badge-text {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(79,195,247,0.9);
+  }
+
+  /* Main title block */
+  .title-block {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .title-line {
+    font-size: 11px; letter-spacing: 8px; text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 20px;
+  }
+  .title-main {
+    font-size: 38px; font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .title-main .highlight {
+    background: linear-gradient(135deg, #4fc3f7, #7c4dff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .title-sub {
+    font-size: 15px; font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+    margin-top: 16px;
+  }
+
+  /* Divider */
+  .divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, #4fc3f7, transparent);
+    margin: 30px auto;
+  }
+
+  /* Theme quote */
+  .theme {
+    text-align: center;
+    max-width: 480px;
+    margin-bottom: 36px;
+  }
+  .theme-text {
+    font-size: 13px; font-style: italic;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+  .theme-text em {
+    color: rgba(79,195,247,0.7);
+    font-style: normal;
+  }
+
+  /* Info cards row */
+  .info-row {
+    display: flex; gap: 16px;
+    margin-bottom: 36px;
+  }
+  .info-card {
+    flex: 1;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    text-align: center;
+  }
+  .info-label {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(79,195,247,0.6);
+    margin-bottom: 8px;
+  }
+  .info-value {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+
+  /* Topic pills */
+  .topics {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px;
+    margin-bottom: 36px;
+    max-width: 520px;
+  }
+  .topic {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.7);
+  }
+  .topic.t-blue { border-color: rgba(79,195,247,0.25); color: rgba(79,195,247,0.9); background: rgba(79,195,247,0.06); }
+  .topic.t-purple { border-color: rgba(124,77,255,0.25); color: rgba(167,139,250,0.9); background: rgba(124,77,255,0.06); }
+  .topic.t-teal { border-color: rgba(0,200,200,0.25); color: rgba(0,229,255,0.9); background: rgba(0,200,200,0.06); }
+  .topic.t-pink { border-color: rgba(200,80,120,0.25); color: rgba(244,143,177,0.9); background: rgba(200,80,120,0.06); }
+
+  /* Agenda preview */
+  .agenda-preview {
+    width: 100%; max-width: 500px;
+    margin-bottom: 32px;
+  }
+  .agenda-title {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .agenda-items {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .agenda-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .agenda-time {
+    font-size: 10px; font-weight: 600;
+    color: rgba(79,195,247,0.7);
+    min-width: 80px;
+    letter-spacing: 0.5px;
+  }
+  .agenda-sep {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(124,77,255,0.5);
+    flex-shrink: 0;
+  }
+  .agenda-name {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.4;
+  }
+
+  /* Organizers */
+  .organizers {
+    display: flex; gap: 40px;
+    margin-bottom: 24px;
+  }
+  .org-block { text-align: center; }
+  .org-label {
+    font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+  }
+  .org-name {
+    font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    text-align: center;
+  }
+  .footer-slogan {
+    font-size: 14px; font-weight: 300;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 6px;
+  }
+  .footer-year {
+    font-size: 9px; letter-spacing: 4px;
+    color: rgba(255,255,255,0.15);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<!-- DNA decorative -->
+<div class="dna">
+  <div class="dna-dot" style="top:5%;left:20px"></div>
+  <div class="dna-dot" style="top:10%;left:50px"></div>
+  <div class="dna-dot" style="top:16%;left:25px"></div>
+  <div class="dna-dot" style="top:22%;left:55px"></div>
+  <div class="dna-dot" style="top:28%;left:18px"></div>
+  <div class="dna-dot" style="top:35%;left:48px"></div>
+  <div class="dna-dot" style="top:42%;left:30px"></div>
+  <div class="dna-dot" style="top:50%;left:58px"></div>
+  <div class="dna-dot" style="top:58%;left:22px"></div>
+  <div class="dna-dot" style="top:65%;left:52px"></div>
+  <div class="dna-dot" style="top:72%;left:28px"></div>
+  <div class="dna-dot" style="top:80%;left:55px"></div>
+  <div class="dna-dot" style="top:88%;left:20px"></div>
+  <div class="dna-dot" style="top:95%;left:45px"></div>
+  <div class="dna-line" style="left:38px;top:5%;height:90%"></div>
+</div>
+
+<!-- Particles -->
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+<div class="particle p5"></div>
+<div class="particle p6"></div>
+<div class="particle p7"></div>
+<div class="particle p8"></div>
+
+<!-- Corners -->
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<!-- Content -->
+<div class="content">
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    <div class="badge-text">XJTLU Rongchuang College</div>
+  </div>
+
+  <div class="title-block">
+    <div class="title-line">Forum 2026</div>
+    <div class="title-main">
+      <span class="highlight">AI &amp; BioTech</span>
+    </div>
+    <div class="title-main" style="font-size: 22px; font-weight: 400; color: rgba(255,255,255,0.75); margin-top: 4px;">
+      for Agriculture, Food, Drug &amp; Healthcare
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="theme">
+    <div class="theme-text">
+      <em>Driving the Future</em> — How AI and biotechnology are reshaping agriculture, food systems, drug discovery, and healthcare to address global challenges.
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-card">
+      <div class="info-label">Date</div>
+      <div class="info-value">May 9, 2026 (Sat)</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Time</div>
+      <div class="info-value">2:00 — 5:00 PM</div>
+    </div>
+    <div class="info-card">
+      <div class="info-label">Venue</div>
+      <div class="info-value">Rongchuang College<br>XJTLU, Suzhou</div>
+    </div>
+  </div>
+
+  <div class="topics">
+    <div class="topic t-blue">🌾 Precision Agriculture</div>
+    <div class="topic t-purple">🧬 Drug Discovery</div>
+    <div class="topic t-teal">🍎 Food Technology</div>
+    <div class="topic t-pink">🏥 Smart Healthcare</div>
+  </div>
+
+  <div class="agenda-preview">
+    <div class="agenda-title">Programme Preview</div>
+    <div class="agenda-items">
+      <div class="agenda-row">
+        <div class="agenda-time">2:00 – 2:20</div>
+        <div class="agenda-sep"></div>
+        <div class="agenda-name">Frontier Trends in AI &amp; BioTech Convergence</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-time">2:20 – 2:40</div>
+        <div class="agenda-sep"></div>
+        <div class="agenda-name">From Lab to Market: Commercializing Biotech Innovation</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-time">2:40 – 3:40</div>
+        <div class="agenda-sep"></div>
+        <div class="agenda-name">Panel Discussions — Agriculture · Food · Pharma · Healthcare</div>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-time">3:40 – 5:00</div>
+        <div class="agenda-sep"></div>
+        <div class="agenda-name">Roundtable — Ethics &amp; Regulatory Challenges of AI &amp; BioTech</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="organizers">
+    <div class="org-block">
+      <div class="org-label">Hosted by</div>
+      <div class="org-name">Rongchuang College, XJTLU</div>
+    </div>
+    <div class="org-block">
+      <div class="org-label">Co-organized by</div>
+      <div class="org-name">Zuowang Bookhouse</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-slogan">INNOVATE · COLLABORATE · TRANSFORM</div>
+    <div class="footer-year">FORUM ON AI &amp; BIOTECH 2026</div>
+  </div>
+
+</div>
+
+</body>
+</html>

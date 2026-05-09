@@ -1,0 +1,30 @@
+
+# Environment
+# IDE
+# Model weights & checkpoints
+# OS
+# Python
+*.bin
+*.ckpt
+*.egg-info
+*.egg-info/
+*.h5
+*.npz
+*.pkl
+*.pt
+*.pth
+*.pyc
+*.pyo
+*.safetensors
+*.swo
+*.swp
+.DS_Store
+.env
+.idea/
+.venv/
+.vscode/
+Thumbs.db
+__pycache__/
+build/
+dist/
+venv/

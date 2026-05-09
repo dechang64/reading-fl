@@ -1,0 +1,81 @@
+{
+  "experiments": [
+    {
+      "task": "Medical CV (Organoid, DINOv2+PCA)",
+      "modality": "CV",
+      "specialty": "late_stage",
+      "ewa_ws_mean": 89.92,
+      "ewa_ws_std": 11.1,
+      "fedavg_ws_mean": 54.63,
+      "fedavg_ws_std": 1.71,
+      "delta_pp": 35.28,
+      "delta_pct": 64.6,
+      "mean_acc": 0.9579,
+      "final_acc": 0.9917,
+      "n_rounds": 20,
+      "n_clients": 5,
+      "n_classes": 3,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    },
+    {
+      "task": "Financial NLP (Twitter, Sentence-Transformer)",
+      "modality": "NLP",
+      "specialty": "Bearish",
+      "ewa_ws_mean": 74.88749999999999,
+      "ewa_ws_std": 13.120403147388421,
+      "fedavg_ws_mean": 62.75250000000001,
+      "fedavg_ws_std": 10.494425127180621,
+      "delta_pp": 12.1,
+      "delta_pct": 19.3,
+      "mean_acc": 0.7377690288713912,
+      "final_acc": 0.7553805774278215,
+      "n_rounds": 20,
+      "n_clients": 5,
+      "n_classes": 3,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    },
+    {
+      "task": "Medical NLP (PubMed QA, Sentence-Transformer)",
+      "modality": "NLP",
+      "specialty": "no",
+      "ewa_ws_mean": 45.28,
+      "ewa_ws_std": 8.51,
+      "fedavg_ws_mean": 38.58,
+      "fedavg_ws_std": 2.64,
+      "delta_pp": 6.7,
+      "delta_pct": 17.4,
+      "mean_acc": 0.5416,
+      "final_acc": 0.5772,
+      "n_rounds": 20,
+      "n_clients": 5,
+      "n_classes": 3,
+      "conformity_trend": "stable",
+      "total_alerts": 0
+    }
+  ],
+  "summary": {
+    "cv": {
+      "n": 1,
+      "ewa_avg": 89.92,
+      "fedavg_avg": 54.63,
+      "delta_pp": 35.28,
+      "delta_pct": 64.6
+    },
+    "nlp": {
+      "n": 2,
+      "ewa_avg": 60.08,
+      "fedavg_avg": 50.67,
+      "delta_pp": 9.4,
+      "delta_pct": 18.35
+    },
+    "all": {
+      "n": 3,
+      "ewa_avg": 70.03,
+      "fedavg_avg": 51.99,
+      "delta_pp": 18.03,
+      "delta_pct": 33.77
+    }
+  }
+}

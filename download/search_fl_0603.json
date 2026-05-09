@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://www.ibm.com/cn-zh/think/topics/federated-learning",
+    "name": "什么是联邦学习？ - IBM",
+    "snippet": "联邦学习是一种训练机器学习(ML) 模型的去中心化方法。分布式网络中的每个节点都使用其本地数据训练全局模型，中央服务器聚合节点更新以改进全局模型。",
+    "host_name": "www.ibm.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.jos.org.cn/jos/article/virtual/20250523145955001?name=%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0",
+    "name": "联邦学习 - 软件学报",
+    "snippet": "联邦学习(federated learning, FL)是一种分布式模型训练框架, 允许多个客户端在边缘计算(edge computing, EC)环境中协同训练全局模型, 同时保护客户端的本地数据隐私. 然而 ...",
+    "host_name": "www.jos.org.cn",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://crad.ict.ac.cn/cn/article/doi/10.7544/issn1000-1239.202220148?viewType=HTML",
+    "name": "联邦学习开源框架综述 - 计算机研究与发展",
+    "snippet": "Survey of Federated Learning Open-Source Frameworks · 1. 联邦学习概述 · 2. 联邦学习开源框架 · 3. 其他联邦学习框架 · 4. 框架对比分析 · 5. 基于开源框架的联邦学习实验.",
+    "host_name": "crad.ict.ac.cn",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.ccf.org.cn/YOCSEF/Branches/Shenzhen/Upcoming_Events/lt/2020-03-17/696729.shtml",
+    "name": "CCF YOCSEF深圳 线上论坛——联邦学习：人工智能的最后一公里？",
+    "snippet": "此次论坛邀请六位国内外高校及企业知名学者，针对联邦学习的若干热点方向作专题报告。论坛嘉宾及全体参会人士将针对联邦学习涉及的技术、产业化及生态建设 ...",
+    "host_name": "www.ccf.org.cn",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

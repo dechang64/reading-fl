@@ -1,0 +1,1026 @@
+{
+  "medical_nlp": {
+    "task_name": "Medical NLP (ClinicalBERT)",
+    "modality": "nlp",
+    "domain": "medical",
+    "num_rounds": 10,
+    "num_clients": 5,
+    "expert_specialty": "rare_syndrome",
+    "ewa_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4567,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 94.84,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 67.12
+      },
+      {
+        "round": 2,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.426,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 95.22,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 65.22
+      },
+      {
+        "round": 3,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4596,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 97.06,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 61.28
+      },
+      {
+        "round": 4,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4359,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.5,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 67.02
+      },
+      {
+        "round": 5,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4363,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 97.64,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 75.11
+      },
+      {
+        "round": 6,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4338,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 97.39,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 70.59
+      },
+      {
+        "round": 7,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4419,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 96.73,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 65.18
+      },
+      {
+        "round": 8,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4228,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 96.15,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 67.33
+      },
+      {
+        "round": 9,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4306,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 95.48,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 64.29
+      },
+      {
+        "round": 10,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4631,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 95.56,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 69.34
+      }
+    ],
+    "fedavg_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4371,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 2,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4312,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 3,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4458,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 4,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4497,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 5,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4333,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 6,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4653,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 7,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4359,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 8,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4566,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 9,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4465,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      },
+      {
+        "round": 10,
+        "total_primitives": 120,
+        "num_classes": 4,
+        "avg_entropy": 0.4237,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 34.0
+      }
+    ],
+    "summary": {
+      "expert_specialty_weight": {
+        "ewa_mean": 95.96,
+        "fedavg_mean": 71.43,
+        "ewa_std": 1.22,
+        "fedavg_std": 0.0,
+        "improvement": 24.53,
+        "improvement_pct": 34.3
+      },
+      "expert_avg_weight": {
+        "ewa_mean": 67.25,
+        "fedavg_mean": 34.0
+      },
+      "conformity": {
+        "ewa_mean": 0.25,
+        "fedavg_mean": 0.25
+      },
+      "entropy": {
+        "ewa_mean": 0.4407,
+        "fedavg_mean": 0.4425
+      }
+    },
+    "audit_valid": true,
+    "timestamp": "2026-05-01T04:34:49.716181"
+  },
+  "financial_nlp": {
+    "task_name": "Financial NLP (FinBERT)",
+    "modality": "nlp",
+    "domain": "financial",
+    "num_rounds": 10,
+    "num_clients": 5,
+    "expert_specialty": "high_risk",
+    "ewa_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4565,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.48,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 56.43
+      },
+      {
+        "round": 2,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4276,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.41,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 52.62
+      },
+      {
+        "round": 3,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4577,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.68,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 57.98
+      },
+      {
+        "round": 4,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4336,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.87,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 60.86
+      },
+      {
+        "round": 5,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4316,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 96.22,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 63.95
+      },
+      {
+        "round": 6,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4294,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 95.55,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 61.38
+      },
+      {
+        "round": 7,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4456,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 96.27,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 54.02
+      },
+      {
+        "round": 8,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.419,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.45,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 60.99
+      },
+      {
+        "round": 9,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4282,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.27,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 51.76
+      },
+      {
+        "round": 10,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4601,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 95.13,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 60.26
+      }
+    ],
+    "fedavg_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4387,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 2,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4321,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 3,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4424,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 4,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.436,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 5,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4367,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 6,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4612,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 7,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4512,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 8,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4473,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 9,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4345,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      },
+      {
+        "round": 10,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4272,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 73.33,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 29.34
+      }
+    ],
+    "summary": {
+      "expert_specialty_weight": {
+        "ewa_mean": 94.03,
+        "fedavg_mean": 73.33,
+        "ewa_std": 1.59,
+        "fedavg_std": 0.0,
+        "improvement": 20.7,
+        "improvement_pct": 28.2
+      },
+      "expert_avg_weight": {
+        "ewa_mean": 58.02,
+        "fedavg_mean": 29.34
+      },
+      "conformity": {
+        "ewa_mean": 0.25,
+        "fedavg_mean": 0.25
+      },
+      "entropy": {
+        "ewa_mean": 0.4389,
+        "fedavg_mean": 0.4407
+      }
+    },
+    "audit_valid": true,
+    "timestamp": "2026-05-01T04:34:49.761721"
+  },
+  "medical_cv": {
+    "task_name": "Medical CV (Organoid, ResNet18)",
+    "modality": "cv",
+    "domain": "medical",
+    "num_rounds": 10,
+    "num_clients": 5,
+    "expert_specialty": "late_stage",
+    "ewa_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4389,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.57,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 64.16
+      },
+      {
+        "round": 2,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4548,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 89.65,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 73.03
+      },
+      {
+        "round": 3,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.434,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 90.12,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 62.89
+      },
+      {
+        "round": 4,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.467,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.35,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 67.68
+      },
+      {
+        "round": 5,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4609,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.98,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 69.25
+      },
+      {
+        "round": 6,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4322,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.38,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 69.81
+      },
+      {
+        "round": 7,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4468,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.62,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 72.14
+      },
+      {
+        "round": 8,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4392,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.26,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 70.8
+      },
+      {
+        "round": 9,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4453,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.55,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 71.79
+      },
+      {
+        "round": 10,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.442,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 90.41,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 66.91
+      }
+    ],
+    "fedavg_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4655,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 2,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4472,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 3,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4619,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 4,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4443,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 5,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4507,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 6,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4263,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 7,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4472,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 8,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4465,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 9,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4347,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      },
+      {
+        "round": 10,
+        "total_primitives": 119,
+        "num_classes": 4,
+        "avg_entropy": 0.4438,
+        "high_conformity_ratio": 0.25,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 61.11,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 36.18
+      }
+    ],
+    "summary": {
+      "expert_specialty_weight": {
+        "ewa_mean": 91.59,
+        "fedavg_mean": 61.11,
+        "ewa_std": 1.18,
+        "fedavg_std": 0.0,
+        "improvement": 30.48,
+        "improvement_pct": 49.9
+      },
+      "expert_avg_weight": {
+        "ewa_mean": 68.85,
+        "fedavg_mean": 36.18
+      },
+      "conformity": {
+        "ewa_mean": 0.25,
+        "fedavg_mean": 0.25
+      },
+      "entropy": {
+        "ewa_mean": 0.4461,
+        "fedavg_mean": 0.4468
+      }
+    },
+    "audit_valid": true,
+    "timestamp": "2026-05-01T04:34:49.840802"
+  },
+  "industrial_cv": {
+    "task_name": "Industrial CV (PCB Defect, ResNet18)",
+    "modality": "cv",
+    "domain": "industrial",
+    "num_rounds": 10,
+    "num_clients": 5,
+    "expert_specialty": "spurious_copper",
+    "ewa_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4155,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.99,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 65.23
+      },
+      {
+        "round": 2,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4388,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 89.5,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 62.85
+      },
+      {
+        "round": 3,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4228,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.8,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 66.35
+      },
+      {
+        "round": 4,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4321,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.52,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 62.15
+      },
+      {
+        "round": 5,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4132,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 92.28,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 61.41
+      },
+      {
+        "round": 6,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4184,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 94.55,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 65.36
+      },
+      {
+        "round": 7,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4126,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.88,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 66.18
+      },
+      {
+        "round": 8,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4271,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.99,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 59.03
+      },
+      {
+        "round": 9,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4284,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 91.59,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 65.79
+      },
+      {
+        "round": 10,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4252,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 93.03,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 63.27
+      }
+    ],
+    "fedavg_rounds": [
+      {
+        "round": 1,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4357,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 2,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4149,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 3,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4238,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 4,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4077,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 5,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4174,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 6,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4248,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 7,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4156,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 8,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4286,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 9,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.4419,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      },
+      {
+        "round": 10,
+        "total_primitives": 139,
+        "num_classes": 6,
+        "avg_entropy": 0.419,
+        "high_conformity_ratio": 0.1667,
+        "minority_suppressed": 1,
+        "expert_specialty_weight": 71.43,
+        "expert_specialty_conformity": 0.0,
+        "expert_avg_weight": 32.42
+      }
+    ],
+    "summary": {
+      "expert_specialty_weight": {
+        "ewa_mean": 92.71,
+        "fedavg_mean": 71.43,
+        "ewa_std": 1.4,
+        "fedavg_std": 0.0,
+        "improvement": 21.28,
+        "improvement_pct": 29.8
+      },
+      "expert_avg_weight": {
+        "ewa_mean": 63.76,
+        "fedavg_mean": 32.42
+      },
+      "conformity": {
+        "ewa_mean": 0.1667,
+        "fedavg_mean": 0.1667
+      },
+      "entropy": {
+        "ewa_mean": 0.4234,
+        "fedavg_mean": 0.4229
+      }
+    },
+    "audit_valid": true,
+    "timestamp": "2026-05-01T04:34:49.936182"
+  }
+}

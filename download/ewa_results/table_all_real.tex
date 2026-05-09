@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Real FL Experiments: EWA vs FedAvg Expert Weight Share on Specialty Classes.
+All experiments use real data, real model training, and real softmax entropy extraction.
+EWA consistently gives higher weight to the expert client on its specialty class.}
+\label{tab:all_real}
+\begin{tabular}{llcccc}
+\toprule
+Task & Modality & EWA Expert Wt & FedAvg Expert Wt & $\Delta$ (pp) & Relative \\
+\midrule
+Medical CV (Organoid, DINOv2+PCA) & CV & 89.9\% $\pm$ 11.1 & 54.6\% $\pm$ 1.7 & +35.3 & 64.6\% \\
+\midrule
+Financial NLP (Twitter, Sentence-Transformer) & NLP & 74.9\% $\pm$ 13.1 & 62.8\% $\pm$ 10.5 & +12.1 & 19.3\% \\
+\midrule
+Medical NLP (PubMed QA, Sentence-Transformer) & NLP & 45.3\% $\pm$ 8.5 & 38.6\% $\pm$ 2.6 & +6.7 & 17.4\% \\
+\midrule
+\bottomrule
+\end{tabular}
+\end{table*}

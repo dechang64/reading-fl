@@ -1,0 +1,326 @@
+{
+  "experiment": "financial_sentiment_real",
+  "dataset": "zeroshot/twitter-financial-news-sentiment",
+  "n_samples": 9543,
+  "feature_extraction": "TF-IDF(5000) + SVD(128)",
+  "n_clients": 5,
+  "n_rounds": 20,
+  "n_classes": 3,
+  "class_names": [
+    "Bearish",
+    "Bullish",
+    "Neutral"
+  ],
+  "class_distribution_raw": {
+    "Bearish": 1442,
+    "Bullish": 1923,
+    "Neutral": 6178
+  },
+  "client_distributions": {
+    "0": {
+      "Bearish": 0.8,
+      "Bullish": 0.05,
+      "Neutral": 0.15
+    },
+    "1": {
+      "Bearish": 0.05,
+      "Bullish": 0.35,
+      "Neutral": 0.6
+    },
+    "2": {
+      "Bearish": 0.05,
+      "Bullish": 0.3,
+      "Neutral": 0.65
+    },
+    "3": {
+      "Bearish": 0.05,
+      "Bullish": 0.3,
+      "Neutral": 0.65
+    },
+    "4": {
+      "Bearish": 0.05,
+      "Bullish": 0.3,
+      "Neutral": 0.65
+    }
+  },
+  "summary": {
+    "mean_test_acc": 0.7377690288713912,
+    "std_test_acc": 0.016734192675801635,
+    "final_test_acc": 0.7553805774278215,
+    "final_per_class_acc": {
+      "Bearish": 0.5671,
+      "Bullish": 0.7324,
+      "Neutral": 0.8076
+    },
+    "ewa_expert_ws_mean": 74.88749999999999,
+    "ewa_expert_ws_std": 13.120403147388421,
+    "fedavg_expert_ws_mean": 62.75250000000001,
+    "fedavg_expert_ws_std": 10.494425127180621,
+    "delta_pp": 12.1,
+    "delta_relative_pct": 19.3,
+    "conformity_trend": "stable",
+    "total_alerts": 0
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "test_acc": 0.7197,
+      "per_class_acc": {
+        "Bearish": 0.2181,
+        "Bullish": 0.6486,
+        "Neutral": 0.8618
+      },
+      "expert_ws_ewa": 85.13,
+      "expert_ws_fedavg": 84.04,
+      "avg_entropy": 0.9684,
+      "elapsed": 0.53
+    },
+    {
+      "round": 2,
+      "test_acc": 0.7139,
+      "per_class_acc": {
+        "Bearish": 0.6342,
+        "Bullish": 0.6784,
+        "Neutral": 0.7437
+      },
+      "expert_ws_ewa": 48.58,
+      "expert_ws_fedavg": 43.78,
+      "avg_entropy": 0.7591,
+      "elapsed": 0.54
+    },
+    {
+      "round": 3,
+      "test_acc": 0.7029,
+      "per_class_acc": {
+        "Bearish": 0.6141,
+        "Bullish": 0.7081,
+        "Neutral": 0.7227
+      },
+      "expert_ws_ewa": 54.94,
+      "expert_ws_fedavg": 48.96,
+      "avg_entropy": 0.6512,
+      "elapsed": 0.7
+    },
+    {
+      "round": 4,
+      "test_acc": 0.7155,
+      "per_class_acc": {
+        "Bearish": 0.7148,
+        "Bullish": 0.6892,
+        "Neutral": 0.7235
+      },
+      "expert_ws_ewa": 55.23,
+      "expert_ws_fedavg": 47.22,
+      "avg_entropy": 0.5923,
+      "elapsed": 0.53
+    },
+    {
+      "round": 5,
+      "test_acc": 0.7181,
+      "per_class_acc": {
+        "Bearish": 0.6644,
+        "Bullish": 0.6973,
+        "Neutral": 0.7373
+      },
+      "expert_ws_ewa": 61.21,
+      "expert_ws_fedavg": 52.91,
+      "avg_entropy": 0.528,
+      "elapsed": 0.53
+    },
+    {
+      "round": 6,
+      "test_acc": 0.7213,
+      "per_class_acc": {
+        "Bearish": 0.6711,
+        "Bullish": 0.7054,
+        "Neutral": 0.7381
+      },
+      "expert_ws_ewa": 66.69,
+      "expert_ws_fedavg": 55.44,
+      "avg_entropy": 0.499,
+      "elapsed": 0.53
+    },
+    {
+      "round": 7,
+      "test_acc": 0.7433,
+      "per_class_acc": {
+        "Bearish": 0.698,
+        "Bullish": 0.673,
+        "Neutral": 0.7753
+      },
+      "expert_ws_ewa": 63.41,
+      "expert_ws_fedavg": 54.11,
+      "avg_entropy": 0.4692,
+      "elapsed": 0.54
+    },
+    {
+      "round": 8,
+      "test_acc": 0.736,
+      "per_class_acc": {
+        "Bearish": 0.651,
+        "Bullish": 0.6973,
+        "Neutral": 0.768
+      },
+      "expert_ws_ewa": 68.33,
+      "expert_ws_fedavg": 56.93,
+      "avg_entropy": 0.4438,
+      "elapsed": 0.69
+    },
+    {
+      "round": 9,
+      "test_acc": 0.736,
+      "per_class_acc": {
+        "Bearish": 0.6745,
+        "Bullish": 0.6973,
+        "Neutral": 0.7623
+      },
+      "expert_ws_ewa": 69.9,
+      "expert_ws_fedavg": 56.77,
+      "avg_entropy": 0.4281,
+      "elapsed": 0.53
+    },
+    {
+      "round": 10,
+      "test_acc": 0.7323,
+      "per_class_acc": {
+        "Bearish": 0.6711,
+        "Bullish": 0.7081,
+        "Neutral": 0.7542
+      },
+      "expert_ws_ewa": 73.35,
+      "expert_ws_fedavg": 58.59,
+      "avg_entropy": 0.4051,
+      "elapsed": 0.52
+    },
+    {
+      "round": 11,
+      "test_acc": 0.7433,
+      "per_class_acc": {
+        "Bearish": 0.6309,
+        "Bullish": 0.6865,
+        "Neutral": 0.7874
+      },
+      "expert_ws_ewa": 77.32,
+      "expert_ws_fedavg": 62.5,
+      "avg_entropy": 0.3846,
+      "elapsed": 0.54
+    },
+    {
+      "round": 12,
+      "test_acc": 0.7407,
+      "per_class_acc": {
+        "Bearish": 0.6242,
+        "Bullish": 0.7459,
+        "Neutral": 0.7672
+      },
+      "expert_ws_ewa": 74.53,
+      "expert_ws_fedavg": 63.41,
+      "avg_entropy": 0.3695,
+      "elapsed": 0.54
+    },
+    {
+      "round": 13,
+      "test_acc": 0.748,
+      "per_class_acc": {
+        "Bearish": 0.5604,
+        "Bullish": 0.7297,
+        "Neutral": 0.7987
+      },
+      "expert_ws_ewa": 83.58,
+      "expert_ws_fedavg": 67.83,
+      "avg_entropy": 0.3386,
+      "elapsed": 0.7
+    },
+    {
+      "round": 14,
+      "test_acc": 0.7507,
+      "per_class_acc": {
+        "Bearish": 0.5872,
+        "Bullish": 0.7162,
+        "Neutral": 0.8003
+      },
+      "expert_ws_ewa": 82.6,
+      "expert_ws_fedavg": 67.22,
+      "avg_entropy": 0.3243,
+      "elapsed": 0.53
+    },
+    {
+      "round": 15,
+      "test_acc": 0.7564,
+      "per_class_acc": {
+        "Bearish": 0.5671,
+        "Bullish": 0.7135,
+        "Neutral": 0.8149
+      },
+      "expert_ws_ewa": 83.69,
+      "expert_ws_fedavg": 70.81,
+      "avg_entropy": 0.3029,
+      "elapsed": 0.53
+    },
+    {
+      "round": 16,
+      "test_acc": 0.7549,
+      "per_class_acc": {
+        "Bearish": 0.5638,
+        "Bullish": 0.7297,
+        "Neutral": 0.8084
+      },
+      "expert_ws_ewa": 88.72,
+      "expert_ws_fedavg": 71.71,
+      "avg_entropy": 0.2866,
+      "elapsed": 0.53
+    },
+    {
+      "round": 17,
+      "test_acc": 0.7512,
+      "per_class_acc": {
+        "Bearish": 0.604,
+        "Bullish": 0.7243,
+        "Neutral": 0.7947
+      },
+      "expert_ws_ewa": 83.45,
+      "expert_ws_fedavg": 69.66,
+      "avg_entropy": 0.2797,
+      "elapsed": 0.53
+    },
+    {
+      "round": 18,
+      "test_acc": 0.7596,
+      "per_class_acc": {
+        "Bearish": 0.5671,
+        "Bullish": 0.7162,
+        "Neutral": 0.8189
+      },
+      "expert_ws_ewa": 93.35,
+      "expert_ws_fedavg": 73.67,
+      "avg_entropy": 0.248,
+      "elapsed": 0.72
+    },
+    {
+      "round": 19,
+      "test_acc": 0.7564,
+      "per_class_acc": {
+        "Bearish": 0.5537,
+        "Bullish": 0.7243,
+        "Neutral": 0.8149
+      },
+      "expert_ws_ewa": 90.38,
+      "expert_ws_fedavg": 74.91,
+      "avg_entropy": 0.2379,
+      "elapsed": 0.54
+    },
+    {
+      "round": 20,
+      "test_acc": 0.7554,
+      "per_class_acc": {
+        "Bearish": 0.5671,
+        "Bullish": 0.7324,
+        "Neutral": 0.8076
+      },
+      "expert_ws_ewa": 93.36,
+      "expert_ws_fedavg": 74.58,
+      "avg_entropy": 0.226,
+      "elapsed": 0.53
+    }
+  ]
+}

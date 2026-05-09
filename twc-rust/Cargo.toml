@@ -1,0 +1,24 @@
+[package]
+name = "twc-rust"
+version = "0.1.0"
+edition = "2021"
+description = "Shared Rust infrastructure for TWC federated learning projects"
+license = "MIT"
+
+[dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+hex = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
+hnsw = "0.7"
+space = "0.17"
+rusqlite = { version = "0.31", features = ["bundled"], optional = true }
+
+[features]
+default = ["sqlite"]
+sqlite = ["rusqlite"]
+
+[dev-dependencies]
+tempfile = "3"

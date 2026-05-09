@@ -1,0 +1,1046 @@
+{
+  "experiment": "organoid_real_v2",
+  "description": "Real FL training with DINOv2 features (PCA 48-dim + noise), real softmax entropy",
+  "n_clients": 5,
+  "n_rounds": 20,
+  "n_classes": 3,
+  "class_names": [
+    "early_stage",
+    "healthy",
+    "late_stage"
+  ],
+  "input_dim": 16,
+  "pca_dim": 16,
+  "noise_std": 1.0,
+  "hidden_dim": 32,
+  "lr": 0.005,
+  "local_epochs": 1,
+  "client_distributions": {
+    "0": {
+      "early_stage": 0.1,
+      "healthy": 0.15,
+      "late_stage": 0.75
+    },
+    "1": {
+      "early_stage": 0.3,
+      "healthy": 0.55,
+      "late_stage": 0.15
+    },
+    "2": {
+      "early_stage": 0.35,
+      "healthy": 0.5,
+      "late_stage": 0.15
+    },
+    "3": {
+      "early_stage": 0.3,
+      "healthy": 0.55,
+      "late_stage": 0.15
+    },
+    "4": {
+      "early_stage": 0.25,
+      "healthy": 0.6,
+      "late_stage": 0.15
+    }
+  },
+  "expert_id": "expert",
+  "expert_specialty": "late_stage",
+  "train_samples": {
+    "expert": 111,
+    "lab_1": 92,
+    "lab_2": 94,
+    "lab_3": 92,
+    "lab_4": 89
+  },
+  "test_samples": 120,
+  "summary": {
+    "mean_test_acc": 0.9579,
+    "std_test_acc": 0.0749,
+    "final_test_acc": 0.9917,
+    "final_per_class_acc": {
+      "early_stage": 1.0,
+      "healthy": 1.0,
+      "late_stage": 0.9756
+    },
+    "ewa_expert_ws_mean": 89.92,
+    "ewa_expert_ws_std": 11.1,
+    "fedavg_expert_ws_mean": 54.63,
+    "fedavg_expert_ws_std": 1.71,
+    "delta_pp": 35.28,
+    "delta_pct": 64.6,
+    "conformity_trend": "stable",
+    "total_alerts": 0
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "test_acc": 0.6833,
+      "per_class_acc": {
+        "early_stage": 0.6047,
+        "healthy": 0.4444,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 65.95,
+      "expert_ws_fedavg": 61.71,
+      "avg_entropy": 1.0353,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.8198,
+          "n_samples": 111,
+          "avg_entropy": 0.9103
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.75,
+          "n_samples": 92,
+          "avg_entropy": 1.0747
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.6489,
+          "n_samples": 94,
+          "avg_entropy": 1.0771
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.6413,
+          "n_samples": 92,
+          "avg_entropy": 1.0701
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.7753,
+          "n_samples": 89,
+          "avg_entropy": 1.0706
+        }
+      ],
+      "elapsed": 1.86
+    },
+    {
+      "round": 2,
+      "test_acc": 0.8167,
+      "per_class_acc": {
+        "early_stage": 0.6047,
+        "healthy": 0.8611,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 64.45,
+      "expert_ws_fedavg": 55.91,
+      "avg_entropy": 0.9753,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.8649,
+          "n_samples": 111,
+          "avg_entropy": 0.7687
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.8804,
+          "n_samples": 92,
+          "avg_entropy": 1.0363
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.8936,
+          "n_samples": 94,
+          "avg_entropy": 1.0486
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.8913,
+          "n_samples": 92,
+          "avg_entropy": 1.0398
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9101,
+          "n_samples": 89,
+          "avg_entropy": 1.0257
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 3,
+      "test_acc": 0.9,
+      "per_class_acc": {
+        "early_stage": 0.7209,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 70.1,
+      "expert_ws_fedavg": 53.8,
+      "avg_entropy": 0.8797,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.9009,
+          "n_samples": 111,
+          "avg_entropy": 0.5825
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.8696,
+          "n_samples": 92,
+          "avg_entropy": 0.9633
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.883,
+          "n_samples": 94,
+          "avg_entropy": 0.9839
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.8913,
+          "n_samples": 92,
+          "avg_entropy": 0.9824
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9213,
+          "n_samples": 89,
+          "avg_entropy": 0.9479
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 4,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9535,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 79.65,
+      "expert_ws_fedavg": 55.11,
+      "avg_entropy": 0.7715,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.9189,
+          "n_samples": 111,
+          "avg_entropy": 0.4405
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9783,
+          "n_samples": 92,
+          "avg_entropy": 0.8614
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9149,
+          "n_samples": 94,
+          "avg_entropy": 0.9097
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.9783,
+          "n_samples": 92,
+          "avg_entropy": 0.8726
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9551,
+          "n_samples": 89,
+          "avg_entropy": 0.8407
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 5,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9535,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 85.73,
+      "expert_ws_fedavg": 54.07,
+      "avg_entropy": 0.6433,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.964,
+          "n_samples": 111,
+          "avg_entropy": 0.3306
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.7371
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9468,
+          "n_samples": 94,
+          "avg_entropy": 0.7949
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.9674,
+          "n_samples": 92,
+          "avg_entropy": 0.7268
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9551,
+          "n_samples": 89,
+          "avg_entropy": 0.6901
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 6,
+      "test_acc": 0.9917,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 92.22,
+      "expert_ws_fedavg": 53.25,
+      "avg_entropy": 0.5128,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 0.991,
+          "n_samples": 111,
+          "avg_entropy": 0.2563
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.5651
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9574,
+          "n_samples": 94,
+          "avg_entropy": 0.6592
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.5865
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9551,
+          "n_samples": 89,
+          "avg_entropy": 0.5478
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 7,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9535,
+        "healthy": 1.0,
+        "late_stage": 1.0
+      },
+      "expert_ws_ewa": 94.95,
+      "expert_ws_fedavg": 53.94,
+      "avg_entropy": 0.3916,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.1965
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.4125
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9681,
+          "n_samples": 94,
+          "avg_entropy": 0.5194
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.4532
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9775,
+          "n_samples": 89,
+          "avg_entropy": 0.4145
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 8,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 96.43,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.2812,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.1578
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.2734
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9894,
+          "n_samples": 94,
+          "avg_entropy": 0.3875
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.3109
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 1.0,
+          "n_samples": 89,
+          "avg_entropy": 0.3004
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 9,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 98.06,
+      "expert_ws_fedavg": 53.94,
+      "avg_entropy": 0.1986,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.1078
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.1748
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.2716
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.25
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.2064
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 10,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 99.4,
+      "expert_ws_fedavg": 54.6,
+      "avg_entropy": 0.1347,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0751
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.1126
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9681,
+          "n_samples": 94,
+          "avg_entropy": 0.2032
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.1484
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.1453
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 11,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 98.86,
+      "expert_ws_fedavg": 53.94,
+      "avg_entropy": 0.1007,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0666
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.0687
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9681,
+          "n_samples": 94,
+          "avg_entropy": 0.155
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.1014
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.118
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 12,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 98.89,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0781,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0416
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0621
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.1316
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0776
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.0843
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 13,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 98.59,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0598,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0393
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.0336
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9894,
+          "n_samples": 94,
+          "avg_entropy": 0.113
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0503
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.0659
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 14,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 98.32,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0466,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0328
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0303
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.0835
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0351
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.0536
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 15,
+      "test_acc": 0.9917,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 97.41,
+      "expert_ws_fedavg": 53.94,
+      "avg_entropy": 0.0366,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0176
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0229
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.065
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0334
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9775,
+          "n_samples": 89,
+          "avg_entropy": 0.048
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 16,
+      "test_acc": 0.9917,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 97.12,
+      "expert_ws_fedavg": 54.6,
+      "avg_entropy": 0.0284,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0177
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.0156
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.0582
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0191
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.0329
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 17,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 96.83,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0255,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.011
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0141
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9681,
+          "n_samples": 94,
+          "avg_entropy": 0.0507
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0164
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.038
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 18,
+      "test_acc": 0.9833,
+      "per_class_acc": {
+        "early_stage": 0.9767,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 84.41,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0266,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.011
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.0111
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9787,
+          "n_samples": 94,
+          "avg_entropy": 0.0577
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.015
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 1.0,
+          "n_samples": 89,
+          "avg_entropy": 0.0412
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 19,
+      "test_acc": 0.9917,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 89.0,
+      "expert_ws_fedavg": 53.94,
+      "avg_entropy": 0.0209,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0085
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0125
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9681,
+          "n_samples": 94,
+          "avg_entropy": 0.05
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0126
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 0.9888,
+          "n_samples": 89,
+          "avg_entropy": 0.0228
+        }
+      ],
+      "elapsed": 0.03
+    },
+    {
+      "round": 20,
+      "test_acc": 0.9917,
+      "per_class_acc": {
+        "early_stage": 1.0,
+        "healthy": 1.0,
+        "late_stage": 0.9756
+      },
+      "expert_ws_ewa": 91.93,
+      "expert_ws_fedavg": 54.27,
+      "avg_entropy": 0.0197,
+      "conformity": 0.0,
+      "minority_suppressed": 0,
+      "client_metrics": [
+        {
+          "client_id": "expert",
+          "train_acc": 1.0,
+          "n_samples": 111,
+          "avg_entropy": 0.0077
+        },
+        {
+          "client_id": "lab_1",
+          "train_acc": 0.9891,
+          "n_samples": 92,
+          "avg_entropy": 0.0092
+        },
+        {
+          "client_id": "lab_2",
+          "train_acc": 0.9894,
+          "n_samples": 94,
+          "avg_entropy": 0.0443
+        },
+        {
+          "client_id": "lab_3",
+          "train_acc": 1.0,
+          "n_samples": 92,
+          "avg_entropy": 0.0076
+        },
+        {
+          "client_id": "lab_4",
+          "train_acc": 1.0,
+          "n_samples": 89,
+          "avg_entropy": 0.0323
+        }
+      ],
+      "elapsed": 0.03
+    }
+  ],
+  "conformity_report": {
+    "trend": {
+      "status": "stable",
+      "current": 0.0,
+      "slope": 0.0,
+      "window_avg": 0.0,
+      "window_max": 0.0,
+      "window_min": 0.0,
+      "total_rounds": 20,
+      "total_alerts": 0
+    },
+    "class_analysis": {
+      "healthy": {
+        "conformity_score": 0.0,
+        "status": "healthy"
+      },
+      "early_stage": {
+        "conformity_score": 0.0,
+        "status": "healthy"
+      },
+      "late_stage": {
+        "conformity_score": 0.0,
+        "status": "healthy"
+      }
+    },
+    "alerts": [],
+    "recommendations": [
+      "Conformity levels are healthy. No action needed."
+    ],
+    "total_rounds_tracked": 20
+  }
+}
