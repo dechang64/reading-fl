@@ -82,6 +82,9 @@ class AuditChain:
         """
         Add a reflection to the audit chain.
 
+        Also syncs to FedCtx audit service if available (Rust audit chain
+        provides full immutability + gRPC/REST access).
+
         Args:
             reflection_data: Dict with reflection fields to hash
             validator: Campus ID that validated this reflection
@@ -100,6 +103,26 @@ class AuditChain:
         )
         block.mine(self.difficulty)
         self.chain.append(block)
+
+        # Sync to FedCtx audit service
+        try:
+            from core.grpc_client import get_fedctx_client
+            client = get_fedctx_client()
+            if client.available:
+                client.audit_append(
+                    event_type="reflection_added",
+                    node_id=validator,
+                    metadata={
+                        "data_hash": data_hash,
+                        "block_index": str(block.index),
+                        "reader_id": reflection_data.get("reader_id", ""),
+                        "excerpt_id": reflection_data.get("excerpt_id", ""),
+                        "emotion": reflection_data.get("emotion", ""),
+                    },
+                )
+        except (ImportError, Exception):
+            pass  # FedCtx not available, local chain is sufficient
+
         return block
 
     def verify_reflection(

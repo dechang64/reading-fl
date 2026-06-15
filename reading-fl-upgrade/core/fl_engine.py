@@ -10,6 +10,11 @@ Upgrade from v1:
 
 Emotions: joy, sadness, anger, fear, surprise, contemplation
 Quality: 0-5 scale (learned from community feedback)
+
+FedCtx integration:
+- When unified-fl-backend is available, delegates FedAvg aggregation
+  to the Rust gRPC server (supports FedAvg/FedProx/EWA + DP)
+- Falls back to local Python FedAvg when FedCtx is unavailable
 """
 
 import numpy as np
@@ -160,9 +165,47 @@ class ReadingFLEngine:
             client_data_sizes: Optional list of sample counts per client.
                 If provided, weights each client by n_k / N (standard FedAvg).
                 If None, falls back to simple average (equal weight).
+
+        FedCtx integration:
+            When unified-fl-backend is available, delegates aggregation
+            to the Rust server for better performance and additional
+            strategies (FedProx/EWA/DP).
         """
         if not params_list:
             raise ValueError("params_list is empty, cannot aggregate")
+
+        # Try FedCtx aggregation
+        try:
+            from core.grpc_client import get_fedctx_client
+            client = get_fedctx_client()
+            if client.available:
+                # Submit all client updates to FedCtx
+                for i, params in enumerate(params_list):
+                    flat_params = torch.cat([p.flatten() for p in params.values()]).numpy()
+                    n_samples = client_data_sizes[i] if client_data_sizes else len(params)
+                    client.fl_submit_update(
+                        client_id=f"reading_client_{i}",
+                        round_num=0,
+                        parameters=flat_params.tolist(),
+                        num_samples=n_samples,
+                    )
+                # Trigger aggregation
+                agg_resp = client.fl_aggregate(strategy="fedavg")
+                if agg_resp and agg_resp.get("parameters"):
+                    # Convert back to state dict
+                    global_params = torch.tensor(agg_resp["parameters"], dtype=torch.float32)
+                    offset = 0
+                    avg = OrderedDict()
+                    for key in params_list[0].keys():
+                        shape = params_list[0][key].shape
+                        size = params_list[0][key].numel()
+                        avg[key] = global_params[offset:offset + size].reshape(shape)
+                        offset += size
+                    return avg
+        except (ImportError, Exception):
+            pass  # Fall through to local aggregation
+
+        # Local fallback: Python FedAvg
         if client_data_sizes is not None and len(client_data_sizes) == len(params_list):
             total = sum(client_data_sizes)
             if total == 0:
