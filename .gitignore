@@ -1,6 +1,8 @@
+*.pyc
 FedPageIndex/
 PageIndex/
 TWC-FL-PROD/
+__pycache__/
 defect-fl-upgrade/
 delta/
 dgy-treehole-v2/
