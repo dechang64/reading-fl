@@ -1,4 +1,3 @@
-from __future__ import annotations
 # ── python/analysis/detector.py ──
 """
 YOLOv11 PCB Defect Detector
@@ -47,22 +46,27 @@ class PCBDefectDetector:
     """YOLOv11-based PCB defect detector."""
 
     DEFECT_CLASSES = [
-        "short_circuit", "open_circuit", "spurious_copper",
-        "missing_hole", "spur", "good",
+        "missing_hole", "mouse_bite", "open_circuit", "short",
+        "spur", "spurious_copper", "good",
     ]
 
     SEVERITY_MAP = {
-        "short_circuit": "critical",
+        "missing_hole": "critical",
+        "mouse_bite": "major",
         "open_circuit": "critical",
-        "spurious_copper": "major",
-        "missing_hole": "major",
+        "short": "critical",
         "spur": "minor",
+        "spurious_copper": "major",
         "good": "none",
     }
 
-    def __init__(self, model_size: str = "n", device: Optional[str] = None):
+    def __init__(self, model_size: str = "n", device: Optional[str] = None, mode: str = "yolo"):
+        self.mode = mode
         self.model_size = model_size
-        self.device = device or ("cuda" if __import__("torch").cuda.is_available() else "cpu")
+        try:
+            self.device = device or ("cuda" if __import__("torch").cuda.is_available() else "cpu")
+        except ImportError:
+            self.device = device or "cpu"
         self.model = None
 
     def _ensure_model(self):
@@ -81,8 +85,10 @@ class PCBDefectDetector:
         )
         return results
 
-    def detect(self, image) -> list[DefectDetection]:
+    def detect(self, image, conf_threshold: float = 0.5) -> list[DefectDetection]:
         """Detect defects in PCB image."""
+        if self.mode == "mock":
+            return self._mock_detect(image)
         self._ensure_model()
         results = self.model(image)
         detections = []
@@ -101,6 +107,30 @@ class PCBDefectDetector:
                     area=float(box.xywh[0][2] * box.xywh[0][3]),
                     severity=self.SEVERITY_MAP.get(cls_name, "minor"),
                 ))
+        return [d for d in detections if d.confidence >= conf_threshold]
+
+    def _mock_detect(self, image) -> list[DefectDetection]:
+        """Generate deterministic mock detections for demo."""
+        h, w = image.shape[:2] if hasattr(image, 'shape') else (480, 640)
+        rng = np.random.RandomState(42)
+        n = rng.randint(2, 6)
+        classes = self.DEFECT_CLASSES[:-1]  # exclude "good"
+        detections = []
+        for _ in range(n):
+            cls = rng.choice(classes)
+            cx, cy = rng.uniform(0.1, 0.9, 2) * [w, h]
+            bw, bh = rng.uniform(30, 120, 2)
+            conf = rng.uniform(0.6, 0.95)
+            detections.append(DefectDetection(
+                bbox=[cx - bw/2, cy - bh/2, cx + bw/2, cy + bh/2],
+                class_name=cls,
+                class_id=self.DEFECT_CLASSES.index(cls),
+                confidence=round(conf, 3),
+                cx=round(cx, 1), cy=round(cy, 1),
+                width=round(bw, 1), height=round(bh, 1),
+                area=round(bw * bh, 1),
+                severity=self.SEVERITY_MAP.get(cls, "minor"),
+            ))
         return detections
 
     def export_backbone_weights(self) -> dict:

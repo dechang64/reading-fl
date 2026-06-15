@@ -1,4 +1,3 @@
-from __future__ import annotations
 # ── python/analysis/segmentor.py ──
 """
 SAM2 PCB Defect Segmentor
@@ -44,7 +43,8 @@ class DefectSegmentation:
 class PCBDefectSegmentor:
     """SAM2-based PCB defect segmentor."""
 
-    def __init__(self, checkpoint: str = "sam2_hiera_small.pt"):
+    def __init__(self, checkpoint: str = "sam2_hiera_small.pt", mode: str = "sam"):
+        self.mode = mode
         self.predictor = None
         self.checkpoint = checkpoint
 
@@ -56,6 +56,8 @@ class PCBDefectSegmentor:
 
     def segment(self, image: np.ndarray, boxes: list[list[float]],
                 defect_types: Optional[list[str]] = None) -> list[DefectSegmentation]:
+        if self.mode == "mock":
+            return self._mock_segment(image, boxes, defect_types)
         self._ensure_predictor()
         self.predictor.set_image(image)
 
@@ -66,6 +68,23 @@ class PCBDefectSegmentor:
             mask = masks[0]
             metrics = self._compute_morphology(mask, box)
             dtype = defect_types[i] if defect_types and i < len(defect_types) else "unknown"
+            results.append(DefectSegmentation(mask=mask, defect_type=dtype, **metrics))
+        return results
+
+    def _mock_segment(self, image: np.ndarray, boxes: list[list[float]],
+                      defect_types: Optional[list[str]] = None) -> list[DefectSegmentation]:
+        """Generate deterministic mock segmentations for demo."""
+        h, w = image.shape[:2] if hasattr(image, 'shape') else (480, 640)
+        rng = np.random.RandomState(42)
+        results = []
+        for i, box in enumerate(boxes):
+            x1, y1, x2, y2 = int(box[0]), int(box[1]), int(box[2]), int(box[3])
+            x1, y1 = max(0, x1), max(0, y1)
+            x2, y2 = min(w, x2), min(h, y2)
+            mask = np.zeros((h, w), dtype=np.uint8)
+            mask[y1:y2, x1:x2] = 255
+            dtype = defect_types[i] if defect_types and i < len(defect_types) else "unknown"
+            metrics = self._compute_morphology(mask, box)
             results.append(DefectSegmentation(mask=mask, defect_type=dtype, **metrics))
         return results
 

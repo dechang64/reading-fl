@@ -2,9 +2,13 @@
 
 ## 推仓库前必须全面代码审计
 - **铁律**：每次 `git push` 之前，必须执行完整审计流程，不审计不推送
-- **审计清单**：AST 解析全过 → 裸 except → st.metric delta 字符串 → 硬编码密钥 → FedCtx try/except 模式 → import 路径与文件位置匹配 → requirements.txt 覆盖所有依赖
-- **教训**：6/15 推 streamlit-cloud 时没审计就推了，导致 reading-fl/organoid-fl/embroidery-agent 三个项目缺 grpc_client.py，Streamlit Cloud 打不开
-- **原则**：推之前跑一遍审计脚本，确认 0 error 再 push
+- **审计清单**：AST 解析全过 → 裸 except → st.metric delta 字符串 → 硬编码密钥 → FedCtx try/except 模式 → import 路径与文件位置匹配 → requirements.txt 覆盖所有依赖 → __pycache__ 不入库 → 重依赖 lazy import
+- **教训1**：6/15 推 streamlit-cloud 时没审计就推了，导致 reading-fl/organoid-fl/embroidery-agent 三个项目缺 grpc_client.py，Streamlit Cloud 打不开
+- **教训2**：6/15 给5个仓库加 app.py 但没 commit+push，部署文件只存在本地，Streamlit Cloud 仍然找不到
+- **教训3**：analysis/__init__.py 直接 import feature_extractor（依赖 torchvision），Streamlit Cloud 没装 torchvision 就 ModuleNotFoundError。必须 lazy import
+- **教训4**：reading-fl 仓库是整个 workspace 根目录，不能 exec 路由 app.py，必须把实际模块复制到根目录
+- **教训5**：__pycache__ 不应入库，所有仓库 .gitignore 必须包含 `__pycache__/` 和 `*.pyc`
+- **原则**：推之前跑一遍审计脚本，确认 0 error 再 push；修改前先理解原有结构，不破坏已有成果
 
 ## VLM 设计审查
 - **工具**：`z-ai vision -p "prompt" -i screenshot.png -o output.json`

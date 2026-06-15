@@ -1,4 +1,3 @@
-from __future__ import annotations
 # ── python/analysis/feature_extractor.py ──
 """
 DINOv2 PCB Feature Extractor
@@ -12,11 +11,16 @@ Use cases:
 """
 
 import numpy as np
-import torch
-import torch.nn as nn
 from PIL import Image
 from typing import Optional
-from torchvision import transforms
+
+try:
+    import torch
+    import torch.nn as nn
+    from torchvision import transforms
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
 
 
 class DINOv2PCBExtractor(nn.Module):
@@ -28,7 +32,7 @@ class DINOv2PCBExtractor(nn.Module):
         super().__init__()
         self.model_name = model_name
         self.variant = model_name.split("/")[-1]
-        self.dim = self.MODEL_DIMS.get(self.variant, 768)
+        self.dim = self.MODEL_DIMS.get(self.variant, self.MODEL_DIMS.get(self.variant.replace("dinov2-", ""), 768))
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
     def _load_backbone(self):

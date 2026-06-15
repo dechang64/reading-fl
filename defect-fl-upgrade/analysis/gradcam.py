@@ -1,4 +1,3 @@
-from __future__ import annotations
 # ── python/analysis/gradcam.py ──
 """
 Grad-CAM for PCB Defect Classification
@@ -12,15 +11,24 @@ Critical for manufacturing:
 """
 
 import numpy as np
-import torch
-import torch.nn as nn
 from typing import Optional
+
+try:
+    import torch
+    import torch.nn as nn
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+    nn = None
+    torch = None
 
 
 class GradCAM:
     """Grad-CAM for PCB defect classification models."""
 
-    def __init__(self, model: nn.Module, target_layer: Optional[nn.Module] = None):
+    def __init__(self, model=None, target_layer=None):
+        if not HAS_TORCH or nn is None:
+            raise RuntimeError("GradCAM requires PyTorch. Install torch or use mock mode.")
         self.model = model
         self.model.eval()
         self.gradients = None
