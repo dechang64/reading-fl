@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "### Streamlit应用部署错误分析（基于截图内容）\n\n\n#### **1. 核心错误信息**  \n- **错误内容**：`Main module does not exist`  \n- **出现位置**：浏览器控制台（右侧黑色日志区域）  \n- **具体原因**：Streamlit应用启动时，无法找到指定的主模块文件（即`app.py`或`main.py`等入口文件）。通常是因为：  \n  - 文件路径配置错误（如`streamlit run`时未指定正确路径，或部署时`main`字段指向的文件不存在）；  \n  - 文件名拼写错误（如`app.py`误写为`app.pyt`）；  \n  - 文件被误删或未上传至部署环境。  \n\n\n#### **2. 页面提示信息**  \n- **错误内容**：`Oh no. Error running app. If you need help, try the Streamlit docs and forums.`  \n- **出现位置**：Streamlit应用的错误页面（左侧白色区域）  \n- **具体原因**：Streamlit检测到应用启动失败，显示通用错误提示，引导用户参考官方文档或社区论坛（`Streamlit docs and forums`）获取帮助。  \n\n\n#### **3. 部署环境路径信息**  \n- **错误内容**：`dechange64/reading-fl/main/app.py`（截图底部红色条中的路径）  \n- **出现位置**：Streamlit部署控制台（底部红色条）  \n- **具体原因**：部署环境（如Streamlit Cloud）尝试加载的文件路径为`dechange64/reading-fl/main/app.py`，但该路径下的`app.py`文件不存在，导致`Main module does not exist`错误。  \n\n\n### 总结  \n所有错误的核心原因是**主模块文件（`app.py`）未找到**，需检查：  \n- 文件是否存在于部署路径（`dechange64/reading-fl/main/`）中；  \n- 文件名是否正确（应为`app.py`）；  \n- 部署配置（如`streamlit.yml`中的`main`字段）是否指向正确文件。",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1781492076,
+  "id": "20260615105426a4476c42784a42e0",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "20260615105426a4476c42784a42e0",
+  "usage": {
+    "completion_tokens": 455,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 4061,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    },
+    "total_tokens": 4516
+  }
+}

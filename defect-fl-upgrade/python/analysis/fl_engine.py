@@ -204,6 +204,25 @@ class DefectFLEngine:
                 "client_metrics": client_metrics,
             }
             history.append(round_metrics)
+
+            # Sync round to FedCtx audit service
+            try:
+                from core.grpc_client import get_fedctx_client
+                fedctx = get_fedctx_client()
+                if fedctx.available:
+                    fedctx.audit_append(
+                        event_type="fl_round_complete",
+                        node_id="defect_fl_server",
+                        metadata={
+                            "round": str(rnd),
+                            "val_acc": f"{val_acc:.4f}",
+                            "val_loss": f"{val_loss:.4f}",
+                            "n_clients": str(n_clients),
+                        },
+                    )
+            except (ImportError, Exception):
+                pass
+
             if progress_callback:
                 progress_callback(rnd, round_metrics)
 

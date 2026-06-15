@@ -84,3 +84,70 @@ class PCBDefectDetector(Detector):
             "severity": severity_counts,
             "avg_confidence": round(float(np.mean([d.confidence for d in detections])), 4),
         }
+
+    def find_similar_defects(
+        self,
+        defect_embedding: list,
+        k: int = 10,
+    ) -> list[dict]:
+        """Find similar PCB defects via FedCtx HNSW vector search.
+
+        When FedCtx is unavailable, returns empty list (local fallback
+        would require a separate HNSW index, not included in detector).
+
+        Args:
+            defect_embedding: Feature vector of the defect (from DINOv2).
+            k: Number of similar defects to return.
+
+        Returns:
+            List of dicts with 'distance', 'defect_type', 'severity' etc.
+        """
+        try:
+            from core.grpc_client import get_fedctx_client
+            client = get_fedctx_client()
+            if client.available:
+                resp = client.vector_search(defect_embedding, k=k)
+                if resp and resp.get("results"):
+                    return [
+                        {
+                            "distance": hit.get("distance", 1.0),
+                            "defect_type": hit.get("metadata", {}).get("class_name", ""),
+                            "severity": hit.get("metadata", {}).get("severity", ""),
+                            "factory_id": hit.get("metadata", {}).get("factory_id", ""),
+                        }
+                        for hit in resp["results"]
+                    ]
+        except (ImportError, Exception):
+            pass
+        return []
+
+    def index_defect(
+        self,
+        defect_id: str,
+        defect_embedding: list,
+        class_name: str = "",
+        severity: str = "minor",
+        factory_id: str = "",
+    ) -> bool:
+        """Index a defect embedding into FedCtx vector store for similarity search.
+
+        Returns True if successfully indexed, False otherwise.
+        """
+        try:
+            from core.grpc_client import get_fedctx_client
+            client = get_fedctx_client()
+            if client.available:
+                client.vector_insert(
+                    f"defect::{defect_id}",
+                    defect_embedding,
+                    metadata={
+                        "class_name": class_name,
+                        "severity": severity,
+                        "factory_id": factory_id,
+                        "type": "pcb_defect",
+                    },
+                )
+                return True
+        except (ImportError, Exception):
+            pass
+        return False

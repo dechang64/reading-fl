@@ -29,7 +29,7 @@ from twc_core.ewa.conformity import ConformityDetector
 
 
 # ── Config ──
-FEATURES_PATH = "/home/z/my-project/organoid-fl-upgrade/fl/features.npz"
+FEATURES_PATH = "/home/z/my-project/organoid-fl/fl/features.npz"
 N_CLIENTS = 5
 N_ROUNDS = 20
 LOCAL_EPOCHS = 2
