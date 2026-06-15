@@ -1,0 +1,22 @@
+[project]
+name = "fedpageindex"
+version = "0.1.0"
+description = "联邦混合检索与知识图谱排序系统"
+requires-python = ">=3.11"
+dependencies = [
+    "hnswlib>=0.8.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "numpy>=1.24.0",
+    "litellm>=1.80.0",
+    "pymupdf>=1.24.0",
+    "PyPDF2>=3.0.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "httpx>=0.24"]
+
+[project.scripts]
+fedpageindex = "src.main:main"

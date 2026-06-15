@@ -40,10 +40,51 @@ class FedAvgAggregator:
     """
 
     def aggregate(self, updates: List[ClientUpdate]) -> AggregationResult:
-        """Perform FedAvg aggregation over client updates."""
+        """Perform FedAvg aggregation over client updates.
+
+        FedCtx integration: when unified-fl-backend is available, delegates
+        aggregation to the Rust server (supports FedAvg/FedProx/EWA + DP).
+        Falls back to local Python FedAvg when FedCtx is unavailable.
+        """
         if not updates:
             raise ValueError("No updates to aggregate")
 
+        # Try FedCtx aggregation
+        try:
+            from core.grpc_client import get_fedctx_client
+            client = get_fedctx_client()
+            if client.available:
+                for i, u in enumerate(updates):
+                    flat = []
+                    for layer in u.weights:
+                        flat.extend(layer)
+                    client.fl_submit_update(
+                        client_id=f"embroidery_client_{u.client_id}",
+                        round_num=u.round_id,
+                        parameters=flat,
+                        num_samples=u.num_samples,
+                    )
+                agg_resp = client.fl_aggregate(strategy="fedavg")
+                if agg_resp and agg_resp.get("parameters"):
+                    agg_flat = np.array(agg_resp["parameters"])
+                    offset = 0
+                    global_weights = []
+                    for layer in updates[0].weights:
+                        size = len(layer)
+                        global_weights.append(agg_flat[offset:offset + size].tolist())
+                        offset += size
+                    total_samples = sum(u.num_samples for u in updates)
+                    global_loss = sum(u.local_loss * u.num_samples for u in updates) / max(total_samples, 1)
+                    return AggregationResult(
+                        global_weights=global_weights,
+                        global_loss=global_loss,
+                        participating_clients=len(updates),
+                        total_samples=total_samples,
+                    )
+        except (ImportError, Exception):
+            pass  # Fall through to local aggregation
+
+        # Local fallback: Python FedAvg
         total_samples = sum(u.num_samples for u in updates)
         if total_samples == 0:
             raise ValueError("Total samples is zero — cannot aggregate")

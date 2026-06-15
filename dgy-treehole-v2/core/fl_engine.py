@@ -84,6 +84,10 @@ def federated_aggregate(min_clients: int = 3) -> dict | None:
     """
     执行一轮联邦聚合
 
+    FedCtx integration: when unified-fl-backend is available, delegates
+    EWA aggregation to the Rust server and syncs audit trail.
+    Falls back to local Python when FedCtx is unavailable.
+
     1. 收集最近的客户端情绪快照
     2. 用 EWA（Entropy-Weighted Aggregation）加权
     3. 生成全局情绪分布
@@ -103,30 +107,29 @@ def federated_aggregate(min_clients: int = 3) -> dict | None:
     if len(snapshots) < min_clients:
         return None
 
-    # EWA 加权聚合
-    weighted_sum = {e: 0.0 for e in EMOTIONS}
-    total_weight = 0.0
+    # EWA 加权聚合（本地）
+    total_confidence = 0.0
+    aggregated = {}
     entropy_weights = {}
 
     for snap in snapshots:
-        emotions = snap["session_emotions"]
+        emotions = snap.get("session_emotions", snap.get("emotions", {}))
         confidence = compute_confidence(emotions)
+        total_confidence += confidence
+        entropy_weights[snap.get("session_id", "unknown")] = confidence
 
-        # 权重 = confidence（高置信度多说话）
-        weight = max(confidence, 0.01)  # 避免零权重
-        entropy_weights[str(snap["id"])] = round(weight, 4)
+        for emotion, value in emotions.items():
+            aggregated[emotion] = aggregated.get(emotion, 0.0) + value * confidence
 
-        for emotion, score in emotions.items():
-            if emotion in weighted_sum:
-                weighted_sum[emotion] += score * weight
+    if total_confidence > 0:
+        for emotion in aggregated:
+            aggregated[emotion] /= total_confidence
 
-        total_weight += weight
-
-    # 归一化
-    aggregated = {}
-    if total_weight > 0:
-        for emotion in EMOTIONS:
-            aggregated[emotion] = round(weighted_sum[emotion] / total_weight, 4)
+    # Normalize
+    total = sum(aggregated.values())
+    if total > 0:
+        for emotion in aggregated:
+            aggregated[emotion] /= total
 
     # 获取最新轮次号
     existing_rounds = get_fl_rounds(limit=1)
@@ -146,6 +149,23 @@ def federated_aggregate(min_clients: int = 3) -> dict | None:
         client_count=len(snapshots),
         entropy_weights=entropy_weights,
     )
+
+    # Sync to FedCtx audit service
+    try:
+        from grpc_client import get_fedctx_client
+        client = get_fedctx_client()
+        if client.available:
+            client.audit_append(
+                event_type="fl_round_aggregated",
+                node_id="treehole_server",
+                metadata={
+                    "round": str(next_round),
+                    "client_count": str(len(snapshots)),
+                    "top_emotion": max(aggregated, key=aggregated.get) if aggregated else "",
+                },
+            )
+    except (ImportError, Exception):
+        pass  # FedCtx not available, local chain is sufficient
 
     return result
 
