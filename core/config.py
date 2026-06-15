@@ -2,7 +2,6 @@
 Configuration loader for Reading-FL.
 """
 
-from __future__ import annotations
 import yaml
 from dataclasses import dataclass, field
 from typing import Optional

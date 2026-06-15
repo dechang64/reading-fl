@@ -5,7 +5,6 @@ Lightweight blockchain-style audit trail for reflection authenticity.
 Ensures data provenance without requiring a full blockchain.
 """
 
-from __future__ import annotations
 import hashlib
 import json
 import time

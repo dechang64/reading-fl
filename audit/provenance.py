@@ -5,7 +5,6 @@ Verifies reflection authenticity using multiple signals:
 lamp behavior, timing, text patterns, and blockchain hash.
 """
 
-from __future__ import annotations
 import hashlib
 import time
 import re

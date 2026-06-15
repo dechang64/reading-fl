@@ -1,4 +1,3 @@
-from __future__ import annotations
 # ── core/feature_extractor.py ──
 """
 Reading-FL v2 Feature Extractor
