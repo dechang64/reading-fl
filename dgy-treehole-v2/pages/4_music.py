@@ -12,6 +12,7 @@ from core.config import MUSIC_PLACES, MUSIC_MOODS
 import os
 
 st.set_page_config(page_title="疗愈音乐 · 大观园树洞", page_icon="🎵", layout="centered")
+from core.styles import inject_css; inject_css()
 
 # ── 返回 ──
 if st.button("← 回到大观园", use_container_width=True):
@@ -43,8 +44,6 @@ with col1:
 with col2:
     mood = st.selectbox("情绪", MUSIC_MOODS, index=0)
 
-duration = st.slider("时长（秒）", 30, 120, 60, step=10)
-
 # ── 自定义描述 ──
 custom_prompt = st.text_input(
     "自定义描述（可选）",
@@ -59,7 +58,6 @@ if st.button("🎵 生成疗愈音乐", type="primary", use_container_width=True
             prompt=prompt,
             place=place,
             mood=mood,
-            duration=duration,
         )
 
     if audio_path and os.path.exists(audio_path):

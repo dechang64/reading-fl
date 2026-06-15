@@ -326,11 +326,10 @@ for i, (icon, label) in enumerate(nav_items):
 # ═══════════════════════════════════════════════════════════
 st.markdown("### 🏯 选择你的场景")
 
-for i in range(0, len(SCENES), 2):
-    cols = st.columns(2)
-    for j, scene in enumerate(SCENES[i:i+2]):
-        with cols[j]:
-            st.markdown(f"""
+# 纯 CSS grid 渲染6个场景卡片，保证尺寸统一
+_cards = ""
+for scene in SCENES:
+    _cards += f"""
 <div class="scene-card">
     <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">{scene['icon']}</div>
     <div style="font-weight: 600; font-size: 1rem; color: #2c1810;">{scene['name']}</div>
@@ -340,8 +339,18 @@ for i in range(0, len(SCENES), 2):
         <span class="tag">倾听者：{scene['char']}</span>
         <span class="tag">{scene['theory']}</span>
     </div>
+</div>"""
+st.markdown(f"""
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin:0.8rem 0;">
+{_cards}
 </div>
 """, unsafe_allow_html=True)
+
+# 场景选择按钮（2行×3列，对齐卡片位置）
+for i in range(0, len(SCENES), 3):
+    cols = st.columns(3)
+    for j, scene in enumerate(SCENES[i:i+3]):
+        with cols[j]:
             if st.button(f"进入{scene['name']} →", key=f"scene_{scene['name']}", use_container_width=True):
                 st.session_state.current_scene = scene["name"]
                 st.session_state.chat_character = scene["char"]

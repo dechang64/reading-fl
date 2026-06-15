@@ -34,10 +34,15 @@ try:
     from embroidery_agent.fl.aggregation import FedAvgAggregator
 except ImportError:
     # Fallback stubs for Streamlit Cloud if python/ not on path
+    class _StubResult:
+        def __init__(self):
+            self.preview_svg = "<svg></svg>"
+            self.stitch_plan = type('P', (), {'total_stitches': 0, 'total_colors': 0, 'blocks': []})()
+            self.certificate = None
     class EmbroideryAgent:
         def __init__(self, **kwargs): pass
-        def generate(self, *a, **kw): return None
-        def generate_from_array(self, *a, **kw): return None
+        def generate(self, *a, **kw): return _StubResult()
+        def generate_from_array(self, *a, **kw): return _StubResult()
     class ImageProcessor:
         def process(self, img):
             class R:
@@ -80,8 +85,8 @@ if "_tmpdir" not in st.session_state:
 _tmpdir = st.session_state._tmpdir
 
 if "agent" not in st.session_state:
-    st.session_state.agent = EmbroideryAgent(audit_db=os.path.join(_tmpdir, "audit.db"),
-                                              pattern_db=os.path.join(_tmpdir, "patterns.json"))
+    st.session_state.agent = EmbroideryAgent(audit_db_path=os.path.join(_tmpdir, "audit.db"),
+                                              pattern_library_path=os.path.join(_tmpdir, "patterns.json"))
 if "audit" not in st.session_state:
     st.session_state.audit = AuditCertifier(db_path=os.path.join(_tmpdir, "audit.db"))
 
@@ -94,7 +99,7 @@ if mode == "Generate":
     if uploaded:
         col1, col2 = st.columns(2)
         with col1:
-            st.image(uploaded, caption="Original", use_column_width=True)
+            st.image(uploaded, caption="Original", use_container_width=True)
 
         with st.spinner("Generating embroidery pattern..."):
             # Persistent output dir — NOT a TemporaryDirectory context manager.
@@ -106,12 +111,12 @@ if mode == "Generate":
             with open(img_path, "wb") as f:
                 f.write(uploaded.read())
 
-            result = st.session_state.agent.generate(img_path, output_dir=output_dir, certify=True)
+            result = st.session_state.agent.generate(img_path, output_dir=output_dir)
 
         with col2:
             svg_path = result.preview_svg
             if os.path.exists(svg_path):
-                st.image(svg_path, caption="Stitch Preview", use_column_width=True)
+                st.image(svg_path, caption="Stitch Preview", use_container_width=True)
 
         st.success(f"✅ Generated in {result.processing_time_ms:.0f}ms")
         col_a, col_b, col_c = st.columns(3)
@@ -177,7 +182,7 @@ elif mode == "Audit Chain":
                         "Client": e.client_id, "Hash": e.hash[:12] + "..."} for e in entries])
 
     if st.button("Verify Chain"):
-        valid, length = certifier.verify_chain()
+        valid, length, _ = certifier.verify_chain()
         st.success(f"✅ Chain valid! {length} entries" if valid else f"❌ Chain broken at entry {length}")
 
 # --- Pattern Library Mode ---

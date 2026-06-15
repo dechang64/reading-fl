@@ -14,6 +14,7 @@ from core.db import record_treehole, get_treehole_stats
 import uuid
 
 st.set_page_config(page_title="匿名树洞 · 大观园树洞", page_icon="🌳", layout="centered")
+from core.styles import inject_css; inject_css()
 
 # ── 初始化 session ──
 if "session_id" not in st.session_state:

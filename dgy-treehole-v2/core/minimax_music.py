@@ -1,7 +1,7 @@
 """MiniMax 音乐生成客户端（可选，需单独配置 MINIMAX_API_KEY）
 
 API: POST https://api.minimaxi.com/v1/music_generation
-Model: music-2.6-free
+Model: music-2.6-free（限免）或 music-2.6（Token Plan）
 Response: JSON, data.audio 为 hex 编码音频数据
 
 注意：音乐生成是可选功能，不配置 MINIMAX_API_KEY 时该页面显示提示。
@@ -21,7 +21,6 @@ def generate_music(
     prompt: str,
     place: str = "潇湘馆",
     mood: str = "宁静",
-    duration: int = 60,
     is_instrumental: bool = True,
 ) -> str | None:
     """
@@ -31,7 +30,6 @@ def generate_music(
         prompt: 音乐描述
         place: 场景名（用于生成提示词）
         mood: 情绪风格
-        duration: 时长（秒）
         is_instrumental: 是否纯音乐
 
     Returns:
@@ -47,12 +45,18 @@ def generate_music(
         "Content-Type": "application/json",
     }
 
+    # 对齐官方 mmx CLI 的请求格式
     payload = {
         "model": MUSIC_MODEL,
         "prompt": full_prompt,
-        "duration": duration,
         "is_instrumental": is_instrumental,
+        "audio_setting": {
+            "format": "mp3",
+            "sample_rate": 44100,
+            "bitrate": 256000,
+        },
         "output_format": "hex",
+        "stream": False,
     }
 
     try:
@@ -64,6 +68,11 @@ def generate_music(
         )
         resp.raise_for_status()
         data = resp.json()
+
+        # 检查 base_resp
+        base_resp = data.get("base_resp", {})
+        if base_resp.get("status_code", 0) != 0:
+            return None
 
         # 解码 hex 音频数据
         hex_audio = data.get("data", {}).get("audio", "")

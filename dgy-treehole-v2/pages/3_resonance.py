@@ -14,6 +14,7 @@ from core.emotion_detector import detect_emotion, compute_session_emotion_profil
 from core.config import EMOTIONS, SCENES
 
 st.set_page_config(page_title="匿名共鸣 · 大观园树洞", page_icon="🌸", layout="centered")
+from core.styles import inject_css; inject_css()
 
 # ── 返回 ──
 if st.button("← 回到大观园", use_container_width=True):

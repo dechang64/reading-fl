@@ -30,6 +30,7 @@ CRISIS_MESSAGE = """\
 """
 
 st.set_page_config(page_title="倾诉对话 · 大观园树洞", page_icon="💬", layout="centered")
+from core.styles import inject_css; inject_css()
 
 # ── 返回按钮 ──
 if st.button("← 回到大观园", use_container_width=True):

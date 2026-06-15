@@ -13,6 +13,7 @@ from core.emotion_detector import compute_session_emotion_profile
 from core.config import EMOTIONS, MOCK_MODE
 
 st.set_page_config(page_title="情绪洞察 · 大观园树洞", page_icon="📊", layout="centered")
+from core.styles import inject_css; inject_css()
 
 # ── 返回 ──
 if st.button("← 回到大观园", use_container_width=True):
