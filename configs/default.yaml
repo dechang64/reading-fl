@@ -1,0 +1,67 @@
+# Reading-FL Configuration
+# Federated Emotion Learning for Reading Communities
+
+model:
+  embed_dim: 128
+  hidden_dim: 256
+  backbone_layers: 2
+  dropout: 0.1
+  max_seq_length: 256
+  vocab_size: 10000
+
+heads:
+  emotion:
+    num_classes: 6
+    # 感动/思考/共鸣/困惑/反对/平静
+    labels: ["moved", "thinking", "resonance", "confused", "disagree", "calm"]
+  quality:
+    # 0-1 连续质量分
+    output_dim: 1
+  matching:
+    # 读者画像向量维度
+    output_dim: 64
+
+federated:
+  num_rounds: 20
+  local_epochs: 3
+  batch_size: 32
+  learning_rate: 0.001
+  aggregation: "task_aware"  # fedavg | task_aware
+  temperature: 0.1
+  min_clients: 2
+
+hnsw:
+  dim: 64
+  M: 16
+  ef_construction: 200
+  ef_search: 50
+
+prototype:
+  n_per_domain: 10
+  update_threshold: 0.3
+  min_reflections: 5
+
+audit:
+  enabled: true
+  difficulty: 4
+
+campuses:
+  - id: "campus_a"
+    name: "理工科校区"
+    reader_count: 40
+    style_weight: 0.7  # 偏理性
+  - id: "campus_b"
+    name: "文科校区"
+    reader_count: 45
+    style_weight: 0.3  # 偏感性
+  - id: "campus_c"
+    name: "综合校区"
+    reader_count: 25
+    style_weight: 0.5
+
+data:
+  num_books: 20
+  reflections_per_reader: 3
+  avg_excerpt_length: 80
+  avg_reflection_length: 60
+  seed: 42

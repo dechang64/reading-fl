@@ -40,11 +40,11 @@ class DataProvenance:
 
     def __init__(
         self,
-        audit_chain: Optional[AuditChain] = None,
+        audit_chain: AuditChain,
         min_reading_duration: float = 5.0,
         max_reflections_per_hour: int = 10,
     ):
-        self.chain = audit_chain or AuditChain()
+        self.chain = audit_chain
         self.min_duration = min_reading_duration
         self.max_per_hour = max_reflections_per_hour
 

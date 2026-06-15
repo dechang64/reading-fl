@@ -80,7 +80,7 @@ class Reflection:
             "lamp": self.lamp_id,
             "ts": self.timestamp,
         }, sort_keys=True)
-        self.authenticity_hash = hashlib.sha256(content.encode()).hexdigest()
+        self.authenticity_hash = hashlib.sha256(content.encode()).hexdigest()[:16]
 
     @property
     def reflection_depth(self) -> float:
@@ -93,12 +93,7 @@ class Reflection:
         - 阅读时长（读得久再写感悟，通常更深）
         """
         length_score = min(len(self.reflection_text) / 200.0, 1.0)
-        # More nuanced emotion scoring — not all "calm" is shallow
-        emotion_scores = {
-            "moved": 0.8, "thinking": 0.85, "resonance": 0.75,
-            "confused": 0.6, "disagree": 0.7, "calm": 0.4,
-        }
-        emotion_score = emotion_scores.get(self.emotion_label, 0.5)
+        emotion_score = 0.3 if self.emotion_label == "calm" else 0.7
         duration_score = min(self.reading_duration_sec / 300.0, 1.0)
         return 0.4 * length_score + 0.3 * emotion_score + 0.3 * duration_score
 
@@ -173,7 +168,7 @@ class ReadingSession:
         if not has_interaction:
             return False
         # 排除精确整数（如恰好60秒、120秒）
-        if abs(self.total_duration_sec - round(self.total_duration_sec)) < 0.01:
+        if self.total_duration_sec == int(self.total_duration_sec):
             return False
         return True
 
@@ -209,7 +204,7 @@ class ReaderProfile:
     preferred_domains: list = field(default_factory=list)
     quality_reputation: float = 0.5  # 0-1，持续产出高质量感悟会提升
 
-    def update_from_reflection(self, reflection: Reflection, new_embedding: list, ema_alpha: float = 0.3):
+    def update_from_reflection(self, reflection: Reflection, new_embedding: list):
         """用新感悟更新画像"""
         self.total_reflections += 1
         self.avg_depth = (
@@ -221,21 +216,16 @@ class ReaderProfile:
         if reflection.excerpt.domain not in self.preferred_domains:
             self.preferred_domains.append(reflection.excerpt.domain)
         if new_embedding:
-            # Exponential moving average update for profile vector
+            # 指数移动平均更新画像向量
+            alpha = 0.3
             if self.embedding:
                 self.embedding = [
-                    ema_alpha * n + (1 - ema_alpha) * o
+                    alpha * n + (1 - alpha) * o
                     for n, o in zip(new_embedding, self.embedding)
                 ]
             else:
                 self.embedding = new_embedding
-        # 质量信誉：高质量提升，低质量惩罚
-        depth = reflection.reflection_depth
-        if depth >= 0.5:
-            self.quality_reputation = min(
-                1.0, self.quality_reputation + 0.01 * depth
-            )
-        else:
-            self.quality_reputation = max(
-                0.0, self.quality_reputation - 0.005 * (1.0 - depth)
-            )
+        # 质量信誉缓慢提升
+        self.quality_reputation = min(
+            1.0, self.quality_reputation + 0.01 * reflection.reflection_depth
+        )

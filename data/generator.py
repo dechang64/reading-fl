@@ -275,7 +275,7 @@ class SyntheticDataGenerator:
         excerpts = []
 
         for i in range(reader_count):
-            reader_id = hashlib.sha256(f"{campus_id}_reader_{i}".encode()).hexdigest()[:16]
+            reader_id = hashlib.sha256(f"{campus_id}_reader_{i}".encode()).hexdigest()[:12]
             reader = ReaderProfile(reader_id=reader_id, campus_id=campus_id)
             readers.append(reader)
 
@@ -306,7 +306,7 @@ class SyntheticDataGenerator:
 
                 # 生成阅读时长（30-600秒，带随机性）
                 duration = self.rng.uniform(30, 600)
-                if abs(duration - round(duration)) < 1e-9:
+                if duration == int(duration):
                     duration += self.rng.uniform(0.1, 0.9)  # 避免精确整数
 
                 reflection = Reflection(
@@ -390,7 +390,7 @@ class SyntheticDataGenerator:
     def _generate_session(self, reader_id: str, book_id: str, lamp_id: str) -> ReadingSession:
         """生成一次阅读会话"""
         duration = self.rng.uniform(60, 900)
-        if abs(duration - round(duration)) < 1e-9:
+        if duration == int(duration):
             duration += self.rng.uniform(0.1, 0.9)
 
         n_page_turns = self.rng.randint(2, 15)

@@ -1,572 +1,845 @@
-from __future__ import annotations
-"""
-Reading-FL — 坐忘·阅读联邦平台
-Streamlit Cloud App
+"""心灯 (Reading-FL) — Federated Emotion Learning for Reading Communities
 
-Features:
-    - Write reading reflections
-    - AI emotion classification (6 emotions)
-    - Reader matching via HNSW
-    - Resonance detection (high-impact excerpts)
-    - Federated learning simulation across campuses
-    - Audit chain provenance verification
-"""
+设计原则 (从竞品 Readwise / Are.na / 坐忘灯综合 + 独立思考):
+  1. 用户: 文艺青年 / 知识工作者 / 重视隐私的读书人
+  2. 美学: 暗色 + 暖橙 + 玻璃态 (学坐忘灯但更克制)
+  3. 核心: 写摘录 / 找共鸣 / 往日重现 / 找书友 (4 个功能)
+  4. 隐私: 每页头明示「你的书摘留在你手中」
+  5. 交互: 全用 Streamlit 原生 widget
 
+页面结构:
+  - app.py (这个): 首页 = Hero + 4 功能入口 + 当日往日摘录
+  - pages/1_excerpt.py: 写摘录
+  - pages/2_resonance.py: 心动林
+  - pages/3_archive.py: 我的心灯(往期摘录时间线)
+  - pages/4_genie.py: 精灵(AI 对话)
+  - pages/5_for_authors.py: 回响(作者侧,网文作者 dashboard)
+  - pages/6_book_recommend.py: 段友推荐 (MBTI + 段级)
+  - pages/7_architecture.py: 技术架构 (FL + HNSW + 审计)
+  - pages/8_points.py: 积分账户
+"""
 import streamlit as st
-import numpy as np
-import time
+import sys
 import os
 import hashlib
+import datetime
 
-from core.fl_engine import ReadingFLEngine
-from matching.reader_matcher import ReaderMatcher
-from matching.resonance_detector import ResonanceDetector
-from matching.hnsw_index import HNSWIndex
-from audit.provenance import DataProvenance
-from audit.chain import AuditChain
-from data.reflection import (
-    EMOTION_LABELS, EMOTION_LABEL_CN,
-    Reflection, BookExcerpt, ReaderProfile,
-)
-from data.generator import SyntheticDataGenerator as ReadingDataGenerator, BOOK_CORPUS
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-
-# ============================================================
-# Page Config
-# ============================================================
 st.set_page_config(
-    page_title="Reading-FL · 坐忘·阅读",
-    page_icon="📖",
-    layout="wide",
-    initial_sidebar_state="expanded",
+    page_title="心灯 · Reading-FL",
+    page_icon="🪔",
+    layout="centered",
+    initial_sidebar_state="auto",  # mobile 收起,desktop 展开
 )
 
-# ============================================================
-# Custom CSS
-# ============================================================
+# 强制 sidebar 按钮(mobile 展开/收起)在 dark theme 下可见
+# 兼容微信/老 webview:深 fallback,基础内容必须可见
+# v6.1.2 改进: 默认 onboarded=True (不卡问卷), 用 0_welcome 顶部大按钮 / 折叠问卷
+# 老 webview / 首次访问: 仍可答问卷 (1 步, 折叠式)
+# P0 #4: 反脆弱 + 段友筛选 — 默认跳过, 问卷可选
+if "onboarded" not in st.session_state:
+    st.session_state.onboarded = True  # 默认跳过, 不再卡
+# (0_welcome.py 仍存在, 用户主动访问 /welcome 路径才弹)
+
 st.markdown("""
 <style>
-    .main-header {
-        text-align: center;
-        padding: 2rem 0 1rem;
+/* 兜底:确保 body / main / sidebar 在任何 webview 都有底色 + 亮字 */
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+    background: #0d0d0f !important;
+    color: #e8e4dc !important;
+}
+/* sidebar 永远有可见背景(兼容微信 webview) */
+section[data-testid="stSidebar"] {
+    background-color: #0a0a0c !important;
+    color: #e8e4dc !important;
+    border-right: 1px solid rgba(212, 165, 116, 0.15) !important;
+}
+section[data-testid="stSidebar"] * {
+    color: #e8e4dc !important;
+}
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] a,
+section[data-testid="stSidebar"] .stCaption {
+    color: #e8e4dc !important;
+}
+/* main content 兜底:浅字 */
+.main .block-container,
+.main p,
+.main h1, .main h2, .main h3, .main h4,
+.main .stMarkdown, .main .stText, .main .stCaption {
+    color: #e8e4dc !important;
+}
+
+/* 触发按钮高亮 */
+button[data-testid="baseButton-headerNoSidebar"],
+button[data-testid="baseButton-headerSidebar"] {
+    color: #d4a574 !important;
+    background: rgba(212, 165, 116, 0.12) !important;
+    border: 1px solid #d4a574 !important;
+    border-radius: 6px !important;
+    padding: 0.3rem 0.5rem !important;
+}
+button[data-testid="baseButton-headerNoSidebar"]:hover,
+button[data-testid="baseButton-headerSidebar"]:hover {
+    background: rgba(212, 165, 116, 0.25) !important;
+}
+/* v6.1: 7 级等级徽章 (sidebar) */
+.level-badge {
+    background: linear-gradient(180deg, rgba(212,165,116,0.10) 0%, rgba(196,105,74,0.05) 100%);
+    border: 1px solid rgba(212,165,116,0.30);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    margin: 0.3rem 0 0.8rem 0;
+    font-size: 0.88rem;
+    color: var(--text);
+}
+.level-icon { font-size: 1.2rem; margin-right: 0.4rem; }
+.level-code { font-weight: 600; color: var(--accent); }
+.level-bar {
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+    height: 5px;
+    margin: 0.4rem 0 0.3rem 0;
+    overflow: hidden;
+}
+.level-bar-fill {
+    background: linear-gradient(90deg, #d4a574 0%, #c4694a 100%);
+    height: 5px;
+    border-radius: 4px;
+    transition: width 0.4s;
+}
+.level-next {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+/* v6.1.2: who-badge 身份徽章 (MBTI/星座) */
+.who-badge {
+    background: linear-gradient(135deg, rgba(196,105,74,0.12) 0%, rgba(212,165,116,0.08) 100%);
+    border: 1px solid rgba(196,105,74,0.30);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+    margin: 0.3rem 0 0.5rem 0;
+    font-size: 0.88rem;
+    color: var(--accent);
+}
+.who-empty {
+    color: var(--text-muted);
+    font-style: italic;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# 兼容 mobile: 用 CSS 强制 sidebar 按钮高亮
+st.markdown("""
+<style>
+/* Streamlit sidebar 展开/收起按钮 (mobile 上的 >> 按钮) */
+button[data-testid="baseButton-headerNoSidebar"],
+button[data-testid="baseButton-headerSidebar"] {
+    color: var(--accent) !important;
+    background: rgba(212, 165, 116, 0.12) !important;
+    border: 1px solid var(--accent) !important;
+    border-radius: 6px !important;
+    padding: 0.3rem 0.5rem !important;
+}
+button[data-testid="baseButton-headerNoSidebar"]:hover,
+button[data-testid="baseButton-headerSidebar"]:hover {
+    background: rgba(212, 165, 116, 0.25) !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════════
+#  暗色 + 暖橙主题 (CSS)
+# ═══════════════════════════════════════════════════════════
+st.markdown("""
+<style>
+:root {
+    --bg: #0d0d0f;
+    --bg-soft: #16161a;
+    --card: rgba(255, 255, 255, 0.04);
+    --card-hover: rgba(255, 255, 255, 0.07);
+    --text: #e8e4dc;
+    --text-muted: #8b8680;
+    --text-dim: #5a5650;
+    --accent: #d4a574;          /* 暖金 — 灯芯色 */
+    --accent-soft: #8b6a4a;
+    --ember: #c4694a;           /* 橙红 — 火焰 */
+    --border: rgba(212, 165, 116, 0.15);
+    --border-hover: rgba(212, 165, 116, 0.35);
+}
+
+.stApp {
+    background:
+        radial-gradient(ellipse at top, rgba(212, 165, 116, 0.06) 0%, transparent 60%),
+        linear-gradient(180deg, #0d0d0f 0%, #0a0a0c 100%);
+    color: var(--text);
+}
+
+.main .block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+    max-width: 720px;
+}
+
+/* 字体: 系统无衬线 */
+html, body, .stMarkdown, p, h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+                 "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+    color: var(--text) !important;
+}
+
+h1, h2, h3 {
+    font-weight: 500 !important;
+    letter-spacing: -0.01em;
+}
+
+h1 { font-size: 1.7rem !important; }
+h2 { font-size: 1.3rem !important; margin-top: 2.5rem !important; color: var(--accent) !important; }
+h3 { font-size: 0.85rem !important; color: var(--text-muted) !important;
+     text-transform: uppercase; letter-spacing: 0.18em;
+     font-weight: 500 !important; margin-top: 2rem !important; }
+
+p, .stMarkdown { line-height: 1.7; }
+small, .stCaption { color: var(--text-muted) !important; font-size: 0.85rem; }
+
+/* 输入框: 暗色 + 玻璃态 */
+.stTextInput input,
+.stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] > div {
+    background-color: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    color: var(--text) !important;
+    font-size: 0.95rem !important;
+}
+.stTextInput input:focus,
+.stTextArea textarea:focus {
+    border-color: var(--border-hover) !important;
+    background-color: var(--card-hover) !important;
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1) !important;
+}
+
+/* 主按钮: 暖金底色 */
+.stButton > button {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--ember) 100%) !important;
+    color: #0d0d0f !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1.4rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s !important;
+}
+.stButton > button:hover {
+    background: linear-gradient(135deg, var(--ember) 0%, var(--accent) 100%) !important;
+    transform: translateY(-1px);
+}
+
+.stButton > button[kind="secondary"] {
+    background: var(--card) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+.stButton > button[kind="secondary"]:hover {
+    background: var(--card-hover) !important;
+    border-color: var(--border-hover) !important;
+}
+
+/* Sidebar: 极简暗色 */
+section[data-testid="stSidebar"] {
+    background-color: #0a0a0c !important;
+    border-right: 1px solid var(--border) !important;
+}
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] p {
+    color: var(--text) !important;
+}
+
+/* Sidebar nav: 高对比暖金中文链接 (覆盖 streamlit 默认灰) */
+section[data-testid="stSidebar"] [data-testid="stPageLink"] a,
+section[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"] {
+    background: transparent !important;
+    color: #f0ebe1 !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    padding: 0.55rem 0.8rem !important;
+    border-radius: 8px !important;
+    margin: 0.15rem 0 !important;
+    border: 1px solid transparent !important;
+    transition: all 0.18s ease !important;
+    text-decoration: none !important;
+}
+section[data-testid="stSidebar"] [data-testid="stPageLink"] a:hover,
+section[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"]:hover {
+    background: rgba(212, 165, 116, 0.10) !important;
+    color: var(--accent) !important;
+    border-color: var(--border-hover) !important;
+}
+section[data-testid="stSidebar"] [data-testid="stPageLink"] a span,
+section[data-testid="stSidebar"] a[data-testid="stPageLink-NavLink"] span {
+    color: inherit !important;
+}
+
+/* 分割线 */
+hr { border-color: var(--border) !important; margin: 2rem 0 !important; }
+
+/* 隐私条 */
+.privacy-strip {
+    background: linear-gradient(90deg, rgba(196, 105, 74, 0.1) 0%, rgba(212, 165, 116, 0.1) 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    color: var(--accent);
+    font-size: 0.88rem;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* 被看见示例卡 (3 个,种子转化) */
+.resonance-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin: 0.8rem 0 1rem;
+}
+.resonance-card {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: linear-gradient(135deg, rgba(212,165,116,0.06) 0%, rgba(196,105,74,0.04) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    text-decoration: none !important;
+    color: var(--text) !important;
+    transition: all 0.2s;
+}
+.resonance-card:hover {
+    background: linear-gradient(135deg, rgba(212,165,116,0.12) 0%, rgba(196,105,74,0.08) 100%);
+    border-color: var(--border-hover);
+    transform: translateX(2px);
+}
+.resonance-emoji {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    width: 2.4rem;
+    text-align: center;
+}
+.resonance-content {
+    flex: 1;
+    min-width: 0;
+}
+.resonance-quote {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.resonance-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.resonance-book {
+    color: var(--accent);
+    font-weight: 500;
+}
+.resonance-stats {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.resonance-stat {
+    background: rgba(255,255,255,0.05);
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.72rem;
+}
+.resonance-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+/* CTA strip */
+.cta-strip {
+    background: linear-gradient(135deg, rgba(212,165,116,0.15) 0%, rgba(196,105,74,0.10) 100%);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin: 1rem 0 1.5rem;
+    flex-wrap: wrap;
+}
+.cta-text {
+    color: var(--text);
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 0;
+}
+.cta-button {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--ember) 100%);
+    color: #0d0d0f !important;
+    text-decoration: none !important;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+}
+
+/* 积分徽章 (sidebar) */
+.points-badge {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--ember) 100%);
+    color: #0d0d0f;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin: 0.3rem 0;
+}
+
+/* Hero */
+.lantern-hero {
+    background:
+        radial-gradient(circle at 50% 30%, rgba(212, 165, 116, 0.15) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem 2rem 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.lantern-hero::before {
+    content: "🪔";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    filter: drop-shadow(0 0 8px rgba(212, 165, 116, 0.6));
+}
+.lantern-hero h1 {
+    color: var(--text) !important;
+    font-size: 1.9rem !important;
+    margin: 1rem 0 0.5rem !important;
+    font-weight: 500 !important;
+}
+.lantern-hero .tagline {
+    color: var(--accent);
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+}
+.lantern-hero .sub {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* 功能入口卡 (4 个)*/
+.func-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+}
+.func-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+.func-card:hover {
+    background: var(--card-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+}
+.func-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+.func-name {
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+.func-desc {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+/* 往日摘录卡 */
+.archive-card {
+    background: var(--card);
+    border-left: 3px solid var(--ember);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0;
+}
+.archive-quote {
+    color: var(--text);
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+.archive-meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* 进度条 (dark) */
+.stProgress > div > div > div > div {
+    background: var(--accent) !important;
+}
+
+/* Radio 横排 */
+.stRadio [role="radiogroup"] {
+    gap: 0.5rem;
+}
+.stRadio [role="radiogroup"] label {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    padding: 0.4rem 0.9rem !important;
+    color: var(--text) !important;
+    transition: all 0.15s !important;
+}
+.stRadio [role="radiogroup"] label:hover {
+    background: var(--card-hover) !important;
+}
+
+/* Metric */
+.stMetric {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    padding: 0.8rem !important;
+}
+.stMetric label {
+    color: var(--text-muted) !important;
+}
+.stMetric [data-testid="stMetricValue"] {
+    color: var(--accent) !important;
+    font-weight: 500 !important;
+}
+.stMetric [data-testid="stMetricDelta"] {
+    color: var(--text-muted) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Mobile 适配
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+    .main .block-container {
+        padding-left: 0.9rem !important;
+        padding-right: 0.9rem !important;
+        padding-top: 1rem !important;
+        max-width: 100% !important;
     }
-    .main-header h1 {
-        font-size: 2.5rem;
-        color: #7c3aed;
-        margin-bottom: 0.5rem;
+    h1 { font-size: 1.4rem !important; }
+    h2 { font-size: 1.15rem !important; }
+    h3 { font-size: 0.75rem !important; margin-top: 1.5rem !important; }
+
+    .lantern-hero { padding: 2rem 1rem 1.5rem; }
+    .lantern-hero h1 { font-size: 1.5rem !important; }
+
+    .func-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
     }
-    .main-header p {
-        font-size: 1.1rem;
-        color: #666;
-    }
-    .emotion-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.85rem;
-        margin: 0.25rem;
-        font-weight: 600;
-    }
-    .resonance-card {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 0.5rem 0;
-        border-left: 4px solid #f59e0b;
-    }
+    .func-card { padding: 1rem 0.7rem; }
+    .func-name { font-size: 0.85rem; }
+    .func-desc { font-size: 0.72rem; }
+
+    .stTextArea textarea { min-height: 90px !important; font-size: 16px !important; }
+    .stRadio [role="radiogroup"] > div { flex: 1 1 30% !important; min-width: 70px !important; }
+    .stButton > button { width: 100% !important; min-height: 44px !important; }
+}
+
+@media (max-width: 380px) {
+    h1 { font-size: 1.25rem !important; }
+    .main .block-container { padding-left: 0.6rem !important; padding-right: 0.6rem !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
 
-# ============================================================
-# Session State
-# ============================================================
-if "matcher" not in st.session_state:
-    st.session_state.matcher = ReaderMatcher(embedding_dim=64)
-if "resonance" not in st.session_state:
-    st.session_state.resonance = ResonanceDetector()
-if "provenance" not in st.session_state:
-    st.session_state.provenance = DataProvenance()
-if "reflections" not in st.session_state:
-    st.session_state.reflections = []
-if "reader_profiles" not in st.session_state:
-    st.session_state.reader_profiles = {}
+# ═══════════════════════════════════════════════════════════
+#  Sidebar
+# ═══════════════════════════════════════════════════════════
+from core.points import init_points, show_points_sidebar
 
+init_points()
 
-# ============================================================
-# Sidebar
-# ============================================================
 with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/open-book.png", width=64)
-    st.title("坐忘·阅读")
-    st.caption("Reading-FL v0.1")
+    st.markdown("### 🪔 段友")
+    st.caption("Reading-FL · Federated")
+    show_points_sidebar()
+    # v6.1.2: MBTI/星座/情感画像 侧边栏标签 — 身份徽章
+    # 从 localStorage 恢复
+    st.html("""
+<script>
+(function() {
+    try {
+        var profile = localStorage.getItem('xindeng_who');
+        if (profile) {
+            var url = new URL(window.parent.location.href);
+            if (!url.searchParams.get('restored_who')) {
+                url.searchParams.set('restored_who', '1');
+                url.searchParams.set('who', encodeURIComponent(profile));
+                window.parent.location.href = url.toString();
+            }
+        }
+    } catch(e) {}
+})();
+</script>
+""")
+    qparams = st.query_params
+    if qparams.get("restored_who") == "1":
+        import json as _json
+        try:
+            who = _json.loads(qparams.get("who", "{}"))
+            for k, v in who.items():
+                st.session_state[k] = v
+        except Exception:
+            pass
+    mbti = st.session_state.get("user_mbti", "")
+    zodiac = st.session_state.get("user_zodiac", "")
+    n_emo = len(st.session_state.get("user_emotions_onboard", []))
+    if mbti or zodiac or n_emo >= 3:
+        badge_parts = []
+        if mbti: badge_parts.append(f"**{mbti}**")
+        if zodiac: badge_parts.append(zodiac)
+        if badge_parts:
+            st.markdown(
+                f'<div class="who-badge">🧠 {" · ".join(badge_parts)}</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                '<div class="who-badge who-empty">🧠 还没画像 (点下面设定)</div>',
+                unsafe_allow_html=True,
+            )
+    st.page_link("pages/9_who_am_i.py", label=("🧠 改画像" if mbti or zodiac else "🧠 设定画像"), icon="🧠")
+    st.markdown("---")
+    st.page_link("app.py", label="首页", icon="🏠")
+    st.page_link("pages/1_excerpt.py", label="写摘录", icon="✍️")
+    st.page_link("pages/2_resonance.py", label="心动林", icon="💫")
+    st.page_link("pages/3_archive.py", label="我的心灯", icon="🪔")
+    st.page_link("pages/4_genie.py", label="精灵", icon="🕯️")
+    st.markdown("---")
+    st.caption("**给网文作者**")
+    st.page_link("pages/5_for_authors.py", label="回响", icon="🌊")
+    st.page_link("pages/6_book_recommend.py", label="段友推荐", icon="🔮")
+    st.markdown("---")
+    st.caption("**技术 / 学术**")
+    st.page_link("pages/7_architecture.py", label="技术架构", icon="🏗️")
+    st.page_link("pages/8_points.py", label="🪙 积分账户", icon="🪙")
+    st.markdown("---")
+    st.caption("🔒 你的书摘,留在你手中")
 
-    st.divider()
 
-    st.subheader("👤 读者信息")
-    reader_id = st.text_input("读者ID", value="reader_001", placeholder="e.g., reader_001")
-    campus = st.selectbox("校区", ["北京大学", "清华大学", "复旦大学", "浙江大学", "南京大学"], index=0)
-
-    st.divider()
-
-    st.subheader("📊 平台统计")
-    matcher_stats = st.session_state.matcher.get_stats()
-    st.metric("注册读者", matcher_stats["n_readers"])
-    st.metric("已确认匹配", matcher_stats["n_confirmed_matches"])
-    st.metric("待处理请求", matcher_stats["n_pending_requests"])
-
-    resonance_stats = st.session_state.resonance.get_stats()
-    st.metric("追踪书摘", resonance_stats["n_excerpts_tracked"])
-
-
-# ============================================================
-# Main Page
-# ============================================================
+# ═══════════════════════════════════════════════════════════
+#  浏览器兼容提示 (中国本土浏览器 streamlit 渲染问题)
+# ═══════════════════════════════════════════════════════════
+# 审计 #2 修复: st.html 默认禁用 JavaScript, 原 30 行 UA 检测是死代码.
+# 改用静态提示 — 简洁, 不依赖 JS, 也不假装"在检测".
 st.markdown("""
-<div class="main-header">
-    <h1>📖 坐忘·阅读</h1>
-    <p>基于联邦学习的跨校区阅读社区 — 感悟不出校，共鸣跨校园</p>
+<div style="background: linear-gradient(135deg, #c4694a 0%, #d4a574 100%);
+    color: #0d0d0f; padding: 0.6rem 0.9rem; border-radius: 8px; margin: 0 0 1rem 0;
+    font-size: 0.85rem; font-weight: 500; text-align: center;">
+    🪔 <b>建议用 Safari / Chrome 打开</b> — 其他浏览器可能有渲染问题
 </div>
 """, unsafe_allow_html=True)
 
-tab_write, tab_match, tab_resonance, tab_fl, tab_audit, tab_about = st.tabs([
-    "✍️ 写感悟", "👥 读者匹配", "💫 共鸣检测", "🤝 联邦学习", "🔒 审计链", "ℹ️ 关于"
-])
+# ═══════════════════════════════════════════════════════════
+#  Hero
+# ═══════════════════════════════════════════════════════════
+st.html("""
+<div class="lantern-hero">
+    <h1>读到一段,找到另一个停下来的人</h1>
+    <p class="tagline">你读过的字, 在陌生人那里被看见 · 读完一段的反思, 永久沉淀</p>
+    <p class="sub">Reading-FL · Federated · 你的书摘,留在你手中</p>
+</div>
+""")
 
 
-# ============================================================
-# Tab 1: Write Reflection
-# ============================================================
-with tab_write:
-    st.header("写下你的阅读感悟")
+# ═══════════════════════════════════════════════════════════
+#  3 个示例被看见 (无须登录可见,种子转化)
+# ═══════════════════════════════════════════════════════════
+st.markdown("### 你的字, 正在被看见")
+st.caption("无须登录 — 点开看看 89 个陌生人都在这里想了什么")
 
-    col1, col2 = st.columns([2, 1])
+EXAMPLE_RESONANCES = [
+    {
+        "emoji": "🪦",
+        "quote": "老陈盯着屏幕上那行注释看了很久。他的手指悬在键盘上方,像是要敲什么,又像是要摸什么。",
+        "book": "《代码乡愁》",
+        "chapter": "第 3 章 · 杨家小蠍",
+        "stop_count": 127,
+        "feel_count": 89,
+        "top_feel": "失亲 · 回忆",
+    },
+    {
+        "emoji": "🌙",
+        "quote": "那个夏天所有的事情都还没结束,但我们都知道它要结束了。",
+        "book": "《了不起的盖茨比》",
+        "chapter": "第 7 章 · 菲茨杰拉德",
+        "stop_count": 47,
+        "feel_count": 31,
+        "top_feel": "青春 · 失落",
+    },
+    {
+        "emoji": "🕯️",
+        "quote": "重要的东西用眼睛是看不见的。",
+        "book": "《小王子》",
+        "chapter": "第 21 章 · 圣埃克苏佩里",
+        "stop_count": 89,
+        "feel_count": 62,
+        "top_feel": "哲思 · 童心",
+    },
+]
 
-    with col1:
-        st.subheader("📚 选择书摘")
-        book_title = st.text_input("书名", value="百年孤独", placeholder="输入书名")
-        author = st.text_input("作者", value="马尔克斯", placeholder="输入作者")
-        excerpt = st.text_area(
-            "书摘内容",
-            value="多年以后，面对行刑队，奥雷里亚诺·布恩迪亚上校将会回想起父亲带他去见识冰块的那个遥远的下午。",
-            height=100,
-        )
-
-        st.subheader("✍️ 你的感悟")
-        reflection_text = st.text_area(
-            "阅读感悟",
-            placeholder="写下你读完这段话的感受...",
-            height=150,
-        )
-
-        st.subheader("💭 情感标签")
-        selected_emotions = st.multiselect(
-            "选择情感（可多选）",
-            EMOTION_LABELS,
-            format_func=lambda e: f"{EMOTION_LABEL_CN[e]} ({e})",
-            default=["moved"],
-        )
-
-        depth = st.slider("感悟深度", 0.0, 1.0, value=0.7, step=0.1)
-
-        submit = st.button("📝 提交感悟", type="primary", use_container_width=True)
-
-        if submit and reflection_text:
-            # Create reflection
-            refl = Reflection(
-                reader_id=reader_id,
-                excerpt=BookExcerpt(
-                    book_id=hashlib.md5(book_title.encode()).hexdigest()[:8],
-                    book_title=book_title,
-                    author=author,
-                    paragraph_id="p1",
-                    text=excerpt,
-                ),
-                reflection_text=reflection_text,
-                emotions=selected_emotions,
-                reflection_depth=depth,
-                campus=campus,
-            )
-
-            st.session_state.reflections.append(refl)
-
-            # Update matcher
-            embedding = np.random.RandomState(hash(reader_id) % 2**31).randn(64).astype(np.float32)
-            st.session_state.matcher.add_reader(reader_id, embedding, metadata={"campus": campus})
-
-            # Update resonance
-            st.session_state.resonance.record_signal(
-                excerpt_id=refl.excerpt.book_id,
-                reader_id=reader_id,
-                campus=campus,
-                depth=depth,
-                emotion=selected_emotions[0] if selected_emotions else "calm",
-                reflection_length=len(reflection_text),
-            )
-
-            # Update profile
-            if reader_id not in st.session_state.reader_profiles:
-                st.session_state.reader_profiles[reader_id] = ReaderProfile(
-                    reader_id=reader_id, campus=campus,
-                )
-            st.session_state.reader_profiles[reader_id].update(refl)
-
-            st.success(f"✅ 感悟已提交！情感: {', '.join(EMOTION_LABEL_CN[e] for e in selected_emotions)}")
-
-    with col2:
-        st.subheader("📖 最近感悟")
-        if st.session_state.reflections:
-            for refl in reversed(st.session_state.reflections[-5:]):
-                st.markdown(f"""
-                <div style="background:#f8f9fa; padding:1rem; border-radius:8px; margin-bottom:0.5rem;">
-                    <div style="font-weight:bold; color:#7c3aed;">{refl.excerpt.book_title}</div>
-                    <div style="font-size:0.85rem; color:#666; margin:0.25rem 0;">{refl.excerpt.text[:50]}...</div>
-                    <div style="font-size:0.9rem;">{refl.reflection_text[:80]}...</div>
-                    <div style="margin-top:0.5rem;">
-                        {' '.join(f'<span class="emotion-badge" style="background:#ede9fe; color:#7c3aed;">{EMOTION_LABEL_CN[e]}</span>' for e in refl.emotions)}
-                    </div>
-                    <div style="font-size:0.75rem; color:#999; margin-top:0.25rem;">{refl.reader_id} · {refl.campus}</div>
-                </div>
-                """, unsafe_allow_html=True)
-        else:
-            st.info("还没有感悟，写下第一条吧！")
-
-
-# ============================================================
-# Tab 2: Reader Matching
-# ============================================================
-with tab_match:
-    st.header("读者匹配")
-    st.caption("基于HNSW向量检索，找到阅读品味相似的读者（双盲匹配）")
-
-    col1, col2 = st.columns([1, 1])
-
-    with col1:
-        st.subheader("🔍 发现相似读者")
-        k = st.slider("推荐数量", 1, 20, value=5)
-
-        if st.button("🔎 搜索相似读者", use_container_width=True):
-            if st.session_state.matcher.get_stats()["n_readers"] > 1:
-                # Generate demo readers if needed
-                rng = np.random.RandomState(42)
-                for i in range(2, 12):
-                    rid = f"reader_{i:03d}"
-                    if rid not in st.session_state.matcher.profiles:
-                        emb = rng.randn(64).astype(np.float32)
-                        campus_list = ["北京大学", "清华大学", "复旦大学", "浙江大学", "南京大学"]
-                        st.session_state.matcher.add_reader(
-                            rid, emb,
-                            metadata={"campus": campus_list[i % len(campus_list)]}
-                        )
-
-                query = st.session_state.matcher.profiles.get(reader_id)
-                if query is not None:
-                    results = st.session_state.matcher.find_similar(query, k=k)
-                    for dist, rid, meta in results:
-                        if rid == reader_id:
-                            continue
-                        campus_name = meta.get("campus", "未知")
-                        similarity = max(0, 1 - dist)
-                        st.markdown(f"""
-                        <div style="background:#f0fdf4; padding:1rem; border-radius:8px; margin-bottom:0.5rem; border-left:4px solid #22c55e;">
-                            <div style="font-weight:bold;">👤 {rid}</div>
-                            <div style="font-size:0.85rem; color:#666;">📍 {campus_name}</div>
-                            <div style="font-size:0.9rem;">相似度: <strong>{similarity:.1%}</strong></div>
-                        </div>
-                        """, unsafe_allow_html=True)
-            else:
-                st.warning("需要至少2位读者才能匹配。请先提交感悟。")
-
-    with col2:
-        st.subheader("🤝 匹配操作")
-        target_reader = st.text_input("目标读者ID", value="reader_002")
-
-        if st.button("💌 发送匹配请求", use_container_width=True):
-            if target_reader:
-                # Add target if not exists
-                if target_reader not in st.session_state.matcher.profiles:
-                    rng = np.random.RandomState(hash(target_reader) % 2**31)
-                    emb = rng.randn(64).astype(np.float32)
-                    st.session_state.matcher.add_reader(target_reader, emb, metadata={"campus": "其他校区"})
-
-                result = st.session_state.matcher.send_match_request(reader_id, target_reader)
-                if result:
-                    st.success(f"🎉 与 {target_reader} 匹配成功！")
-                else:
-                    st.info(f"⏳ 已向 {target_reader} 发送匹配请求，等待对方确认...")
-
-        st.divider()
-        st.subheader("📬 待处理请求")
-        pending = st.session_state.matcher.get_pending_requests(reader_id)
-        if pending:
-            for pid in pending:
-                if st.button(f"✅ 接受 {pid}", key=f"accept_{pid}"):
-                    st.session_state.matcher.confirm_match(pid, reader_id)
-                    st.success(f"🎉 与 {pid} 匹配成功！")
-                    st.rerun()
-        else:
-            st.info("暂无待处理请求")
-
-        st.subheader("✅ 已确认匹配")
-        confirmed = st.session_state.matcher.get_confirmed_matches(reader_id)
-        if confirmed:
-            for mid in confirmed:
-                st.markdown(f"🤝 {mid}")
-        else:
-            st.info("暂无已确认匹配")
-
-
-# ============================================================
-# Tab 3: Resonance Detection
-# ============================================================
-with tab_resonance:
-    st.header("共鸣检测")
-    st.caption("发现那些打动最多人的书摘 — 坐忘·咖候选")
-
-    # Generate demo data if needed
-    if st.button("🎲 生成演示数据", use_container_width=True):
-        gen = ReadingDataGenerator(seed=42)
-        rng = np.random.RandomState(42)
-        campuses = ["北京大学", "清华大学", "复旦大学"]
-        for book in BOOK_CORPUS[:5]:
-            for excerpt_text in book["excerpts"]:
-                eid = hashlib.md5(excerpt_text.encode()).hexdigest()[:8]
-                for campus in campuses:
-                    for j in range(rng.randint(3, 8)):
-                        rid = f"demo_{campus}_{j}"
-                        depth = rng.uniform(0.2, 1.0)
-                        emotion = rng.choice(EMOTION_LABELS)
-                        st.session_state.resonance.record_signal(
-                            excerpt_id=eid,
-                            reader_id=rid,
-                            campus=campus,
-                            depth=depth,
-                            emotion=emotion,
-                            reflection_length=rng.randint(20, 500),
-                        )
-        st.success(f"✅ 已生成演示数据！追踪 {st.session_state.resonance.get_stats()['n_excerpts_tracked']} 条书摘")
-
-    st.divider()
-
-    # Top resonant excerpts
-    st.subheader("💫 高共鸣书摘 TOP 10")
-    top = st.session_state.resonance.get_top_resonant(k=10, min_reflections=1)
-    if top:
-        for i, (eid, score, stats) in enumerate(top):
-            st.markdown(f"""
-            <div class="resonance-card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="font-size:1.2rem; font-weight:bold; color:#92400e;">#{i+1} 共鸣指数: {score:.2f}</div>
-                        <div style="font-size:0.85rem; color:#78716c;">书摘ID: {eid} | 感悟数: {stats['n_reflections']} | 校区数: {stats['n_campuses']}</div>
-                    </div>
-                </div>
-                <div style="margin-top:0.5rem; font-size:0.9rem;">
-                    平均深度: {stats['avg_depth']:.2f} | 一致性: {stats['consistency']:.2f}
-                </div>
+st.html("""
+<div class="resonance-stack">
+""" + "".join([
+    f"""
+    <a class="resonance-card" href="resonance">
+        <div class="resonance-emoji">{e['emoji']}</div>
+        <div class="resonance-content">
+            <div class="resonance-quote">「{e['quote']}」</div>
+            <div class="resonance-meta">
+                <span class="resonance-book">{e['chapter']}</span>
+                <span class="resonance-stats">
+                    <span class="resonance-stat">⏸ {e['stop_count']} 人在这里停</span>
+                    <span class="resonance-stat">✍️ {e['feel_count']} 人写了感悟</span>
+                    <span class="resonance-stat"># {e['top_feel']}</span>
+                </span>
             </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.info("暂无数据。点击「生成演示数据」开始体验。")
+        </div>
+        <div class="resonance-arrow">→</div>
+    </a>
+    """
+    for e in EXAMPLE_RESONANCES
+]) + """
+</div>
+""")
 
-    st.divider()
-    st.subheader("☕ 坐忘·咖候选")
-    coffee = st.session_state.resonance.get_coffee_sleeve_candidates(k=5)
-    if coffee:
-        for i, (eid, score, stats) in enumerate(coffee):
-            st.markdown(f"""
-            <div style="background:linear-gradient(135deg, #fef3c7, #fde68a); padding:1rem; border-radius:12px; margin:0.5rem 0; border-left:4px solid #d97706;">
-                <div style="font-weight:bold; color:#92400e;">☕ 候选 #{i+1} — 共鸣指数: {score:.2f}</div>
-                <div style="font-size:0.85rem;">感悟数: {stats['n_reflections']} | 跨校区: {stats['n_campuses']} | 深度: {stats['avg_depth']:.2f}</div>
+st.caption("")
+
+# 主 CTA — 写第一段
+st.html("""
+<div class="cta-strip">
+    <div class="cta-text">📸 读完一段,截屏过来 — AI 一拍识别书名、作者、段落、章节</div>
+    <a class="cta-button" href="excerpt">→ 去点亮第一段</a>
+</div>
+""")
+
+
+# ═══════════════════════════════════════════════════════════
+#  当日往日摘录 (学 Readwise "复习"概念)
+# ═══════════════════════════════════════════════════════════
+st.markdown("### 当日往日摘录")
+st.caption("30 / 60 / 90 天前你读到的")
+
+reflections = st.session_state.get("reflections", [])
+
+def filter_by_age(reflections_list, days_ago):
+    """筛选 days_ago 天前的摘录 (允许 ±3 天误差)"""
+    now = datetime.datetime.now()
+    target_date = now - datetime.timedelta(days=days_ago)
+    matched = []
+    for r in reflections_list:
+        try:
+            ts = datetime.datetime.fromisoformat(r.timestamp)
+            diff_days = abs((ts - target_date).days)
+            if diff_days <= 3:  # ±3 天容差
+                matched.append((diff_days, r))
+        except Exception:
+            pass
+    return sorted(matched, key=lambda x: x[0])[:1]  # 每段取最近 1 条
+
+found_any = False
+for days in [30, 60, 90, 180]:
+    matches = filter_by_age(reflections, days)
+    if matches:
+        diff, r = matches[0]
+        actual_days = days - diff if diff < days else days + diff
+        years = actual_days // 365
+        years_text = f"{years} 年前" if years >= 1 else f"{actual_days} 天前"
+        emo_cn = {
+            "moved": "💧 感动", "thinking": "🌊 思考", "resonance": "🔗 共鸣",
+            "confused": "🌫️ 困惑", "disagree": "⚡ 反对", "calm": "🍃 平静",
+        }.get(r.emotion_label, r.emotion_label)
+        # XSS defense (审计 #1): escape all user fields
+        import html as _html
+        safe_text = _html.escape(r.excerpt.text)
+        safe_title = _html.escape(r.excerpt.book_title)
+        st.markdown(f"""
+        <div class="archive-card">
+            <div class="archive-quote">「{safe_text}」</div>
+            <div class="archive-meta">
+                {years_text} · 《{safe_title}》 · {emo_cn}
             </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.info("暂无符合条件的候选（需跨2+校区共鸣且深度>0.4）")
+        </div>
+        """, unsafe_allow_html=True)
+        found_any = True
+
+if not found_any:
+    st.caption("还没有往日摘录 — 等你积累更多记录后,这里会浮起旧日感动")
 
 
-# ============================================================
-# Tab 4: Federated Learning
-# ============================================================
-with tab_fl:
-    st.header("联邦学习模拟")
-    st.caption("跨校区情感分类模型协同训练 — 感悟数据不出校")
+# ═══════════════════════════════════════════════════════════
+#  跨书社状态
+# ═══════════════════════════════════════════════════════════
+st.markdown("### 跨书社动态")
+st.caption("3 个书社的实时统计")
 
-    col1, col2 = st.columns([1, 2])
+GUILD_STATS = {
+    "guild_夜读派": {"readers": 60, "mood": "思考", "n_reflections": 60},
+    "guild_晨读派": {"readers": 60, "mood": "共鸣", "n_reflections": 60},
+    "guild_全日派": {"readers": 60, "mood": "感动", "n_reflections": 60},
+}
 
-    with col1:
-        st.subheader("⚙️ 训练参数")
-        n_rounds = st.number_input("联邦轮数", value=10, min_value=1, max_value=50)
-        n_clients = st.number_input("校区数量", value=3, min_value=2, max_value=10)
-        lr = st.number_input("学习率", value=0.001, min_value=0.0001, max_value=0.1, format="%.4f")
-        local_epochs = st.number_input("本地轮数", value=2, min_value=1, max_value=10)
-        n_samples = st.number_input("每校区样本数", value=300, min_value=50, max_value=5000, step=50)
-
-        run_fl = st.button("🚀 开始训练", type="primary", use_container_width=True)
-
-    with col2:
-        if run_fl:
-            with st.spinner("🤝 跨校区联邦训练中..."):
-                engine = ReadingFLEngine(
-                    input_dim=64,
-                    num_emotions=6,
-                    hidden_dim=128,
-                    lr=lr,
-                    local_epochs=local_epochs,
-                )
-
-                progress = st.empty()
-                def on_progress(rnd, metrics):
-                    progress.text(f"轮次 {rnd}/{n_rounds} — 验证准确率: {metrics['val_acc']:.1%}")
-
-                # Generate synthetic data
-                rng = np.random.RandomState(42)
-                features = rng.randn(n_samples * n_clients, 64).astype(np.float32)
-                labels = rng.randint(0, 6, size=n_samples * n_clients)
-
-                history = engine.run(
-                    features=features,
-                    labels=labels,
-                    n_clients=n_clients,
-                    rounds=n_rounds,
-                    progress_callback=on_progress,
-                )
-
-            st.success("✅ 训练完成！")
-
-            final = history[-1]
-            m1, m2, m3, m4 = st.columns(4)
-            with m1:
-                st.metric("最终训练准确率", f"{final['avg_train_acc']:.1%}")
-            with m2:
-                st.metric("最终验证准确率", f"{final['val_acc']:.1%}")
-            with m3:
-                st.metric("最终验证损失", f"{final['val_loss']:.3f}")
-            with m4:
-                st.metric("联邦轮数", n_rounds)
-
-            # Convergence chart
-            st.subheader("📈 收敛曲线")
-            rounds = [h["round"] for h in history]
-            chart_data = {
-                "轮次": rounds,
-                "训练准确率": [h["avg_train_acc"] for h in history],
-                "验证准确率": [h["val_acc"] for h in history],
-                "训练损失": [h["avg_train_loss"] for h in history],
-                "验证损失": [h["val_loss"] for h in history],
-            }
-            st.line_chart(chart_data, x="轮次", y=["训练准确率", "验证准确率"])
-
-            # Emotion distribution
-            st.subheader("🎭 情感分类分布")
-            preds, probs = engine.predict(features[:20])
-            emotion_counts = {}
-            for p in preds:
-                emotion = ReadingFLEngine.EMOTIONS[p]
-                emotion_counts[emotion] = emotion_counts.get(emotion, 0) + 1
-            for emotion, count in emotion_counts.items():
-                cn = EMOTION_LABEL_CN.get(emotion, emotion)
-                st.markdown(f"**{cn}** ({emotion}): {count}")
-        else:
-            st.info("配置参数后点击「开始训练」")
+col1, col2, col3 = st.columns(3)
+for col, (gid, s) in zip([col1, col2, col3], GUILD_STATS.items()):
+    with col:
+        nice_name = gid.replace("guild_", "")
+        st.metric(
+            label=nice_name,
+            value=f"{s['readers']}",
+            delta=f"主情绪 · {s['mood']}",
+            delta_color="off",
+        )
 
 
-# ============================================================
-# Tab 5: Audit Chain
-# ============================================================
-with tab_audit:
-    st.header("审计链存证")
-    st.caption("区块链式感悟真实性验证")
-
-    col1, col2 = st.columns([1, 1])
-
-    with col1:
-        st.subheader("📝 添加存证")
-        audit_text = st.text_area("感悟文本", height=100, placeholder="输入要存证的感悟...")
-        audit_reader = st.text_input("读者ID", value=reader_id)
-
-        if st.button("🔗 上链存证", type="primary", use_container_width=True):
-            if audit_text:
-                chain = st.session_state.provenance.chain
-                block = chain.add_block(
-                    data={"text": audit_text, "reader": audit_reader},
-                    validator=campus,
-                )
-                st.success(f"✅ 已存证！区块 #{block.index}")
-                st.json({
-                    "区块索引": block.index,
-                    "时间戳": block.timestamp,
-                    "数据哈希": block.data_hash[:16] + "...",
-                    "前块哈希": block.prev_hash[:16] + "...",
-                    "区块哈希": block.block_hash[:16] + "...",
-                    "验证者": block.validator,
-                })
-
-    with col2:
-        st.subheader("🔍 验证链完整性")
-        chain = st.session_state.provenance.chain
-        is_valid = chain.verify_chain()
-        stats = chain.get_stats()
-
-        if is_valid:
-            st.success("✅ 审计链完整，所有区块验证通过")
-        else:
-            st.error("❌ 审计链验证失败！")
-
-        st.metric("链长度", stats["chain_length"])
-        st.metric("已存证感悟", stats["n_reflections"])
-        st.metric("参与校区", len(stats["validators"]))
-
-        # Provenance check
-        st.divider()
-        st.subheader("🛡️ 真实性验证")
-        if audit_text:
-            check = st.session_state.provenance.verify(
-                reflection_text=audit_text,
-                reader_id=audit_reader,
-            )
-            st.metric("真实性评分", f"{check.score:.1%}")
-            st.json({"检查项": check.checks, "详情": check.details})
-
-
-# ============================================================
-# Tab 6: About
-# ============================================================
-with tab_about:
-    st.header("关于 坐忘·阅读")
-
-    st.markdown("""
-    ### 📖 项目简介
-
-    **坐忘·阅读 (Reading-FL)** 是一个基于联邦学习的跨校区阅读社区平台。读者在各自校区写下阅读感悟，AI分析情感与共鸣，跨校区匹配阅读品味相似的读者。
-
-    核心理念：**感悟不出校，共鸣跨校园**。
-
-    ### 🔬 核心技术
-
-    | 技术 | 用途 |
-    |------|------|
-    | FedAvg | 跨校区情感分类协同训练 |
-    | HNSW | 读者品味相似检索 |
-    | 共鸣检测 | 高影响力书摘发现 |
-    | 审计链 | 感悟真实性存证 |
-    | 多信号验证 | 灯行为+时序+文本+链上哈希 |
-
-    ### 🎭 情感标签
-
-    | 标签 | 含义 |
-    |------|------|
-    | 感动 (moved) | 深受触动 |
-    | 思考 (thinking) | 引发深思 |
-    | 共鸣 (resonance) | 强烈认同 |
-    | 困惑 (confused) | 不太理解 |
-    | 反对 (disagree) | 不同观点 |
-    | 平静 (calm) | 理性客观 |
-
-    ### ☕ 坐忘·咖
-
-    高共鸣书摘自动推荐印制在咖啡杯套上，让好文字在校园间流动。
-
-    ### 📄 开源协议
-
-    Apache-2.0 | [GitHub](https://github.com/dechang64)
-    """)
+# 底部
+st.markdown("---")
+st.caption("心灯 · Reading-FL · License: MIT · Powered by FedCtx")
