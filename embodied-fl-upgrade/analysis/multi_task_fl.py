@@ -125,6 +125,7 @@ class EmbodiedMultiTaskFL:
                 out = client_model(xb)
                 loss = criterion(out, yb)
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(client_model.parameters(), max_norm=1.0)
                 optimizer.step()
                 total_loss += loss.item() * len(xb)
                 correct += (out.argmax(1) == yb).sum().item()
@@ -157,7 +158,7 @@ class EmbodiedMultiTaskFL:
     def _fedavg(params_list: list[OrderedDict]) -> OrderedDict:
         avg = OrderedDict()
         for key in params_list[0]:
-            avg[key] = torch.stack([p[key] for p in params_list]).mean(dim=0)
+            avg[key] = sum(w * p[key] for w, p in zip(weights, params_list))
         return avg
 
     def run(

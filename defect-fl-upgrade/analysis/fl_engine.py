@@ -117,7 +117,7 @@ class DefectFLEngine:
     def _fedavg(params_list):
         avg = OrderedDict()
         for key in params_list[0]:
-            avg[key] = torch.stack([p[key] for p in params_list]).mean(dim=0)
+            avg[key] = sum(w * p[key] for w, p in zip(weights, params_list))
         return avg
 
     def run(self, features, labels, n_clients=3, rounds=10, progress_callback=None):

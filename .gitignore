@@ -23,3 +23,4 @@ suzhou-tt-research/
 twc-core/
 upload/
 .streamlit/secrets.toml
+.env

@@ -137,6 +137,7 @@ class ReadingFLEngine:
                 out = model(bx)
                 loss = criterion(out, by)
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
                 optimizer.step()
 
         model.eval()
@@ -148,10 +149,19 @@ class ReadingFLEngine:
 
         return OrderedDict(model.state_dict()), loss, acc
 
-    def _fedavg(self, params_list):
+    def _fedavg(self, params_list, client_data_sizes=None):
+        if not params_list:
+            raise ValueError("params_list is empty, cannot aggregate")
+        if client_data_sizes is not None and len(client_data_sizes) == len(params_list):
+            total = sum(client_data_sizes)
+            if total == 0:
+                raise ValueError("Total client_data_sizes is zero, cannot aggregate")
+            weights = [n / total for n in client_data_sizes]
+        else:
+            weights = [1.0 / len(params_list)] * len(params_list)
         avg = OrderedDict()
         for key in params_list[0].keys():
-            avg[key] = torch.stack([p[key] for p in params_list]).mean(dim=0)
+            avg[key] = sum(w * p[key] for w, p in zip(weights, params_list))
         return avg
 
     def _evaluate(self, model, X, y):

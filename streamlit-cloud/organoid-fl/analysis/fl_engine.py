@@ -66,7 +66,7 @@ def fedavg_aggregate(
         # Unweighted fallback (equal split)
         avg = OrderedDict()
         for key in client_params[0].keys():
-            avg[key] = torch.stack([p[key].data for p in client_params]).mean(dim=0)
+            avg[key] = sum(w * p[key].data for w, p in zip(weights, client_params))
         return avg
 
     # Weighted FedAvg: w_k = |D_k| / |D|
