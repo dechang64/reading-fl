@@ -1,3 +1,4 @@
+from __future__ import annotations
 """金句周报 — User 每周 1 封邮件, 5 段精选 + 配乐 + AI 评
 
 streamlit cloud 不支持后台 CRON, 简化版: 用户主动触发

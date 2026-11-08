@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ── streamlit_app.py ──
 """
 Embodied-FL: Vision-Language-Action Federated Learning Dashboard

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """GLM 聊天客户端 — 智谱AI OpenAI 兼容格式
 
 API: POST https://open.bigmodel.cn/api/paas/v4/chat/completions

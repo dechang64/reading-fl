@@ -1,3 +1,4 @@
+from __future__ import annotations
 """情绪检测器 — 从用户文本中提取情绪标签
 
 用于：

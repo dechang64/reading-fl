@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ── core/fl_engine.py ──
 """
 Reading-FL v2 Federated Learning Engine
@@ -104,7 +105,8 @@ class ReadingFLEngine:
                     "n_samples": len(split_idx),
                 })
 
-            global_params = self._fedavg(client_params_list)
+            client_data_sizes = [m["n_samples"] for m in client_metrics]
+            global_params = self._fedavg(client_params_list, client_data_sizes)
             self.classifier.load_state_dict(global_params)
             val_loss, val_acc = self._evaluate(self.classifier, val_X, val_y)
             elapsed = time.time() - t0

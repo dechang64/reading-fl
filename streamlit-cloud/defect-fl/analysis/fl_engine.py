@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ── python/analysis/fl_engine.py ──
 """
 Defect-FL Federated Learning Engine

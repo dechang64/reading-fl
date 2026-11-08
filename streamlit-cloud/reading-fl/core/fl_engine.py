@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ── core/fl_engine.py ──
 """
 Reading-FL v2 Federated Learning Engine

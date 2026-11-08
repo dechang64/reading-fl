@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """Run trigger evaluation for a skill description.
 
 Tests whether a skill's description causes GLM to trigger (read the skill)

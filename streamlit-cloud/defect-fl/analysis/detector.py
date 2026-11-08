@@ -1,3 +1,4 @@
+from __future__ import annotations
 # ── python/analysis/detector.py ──
 """
 YOLOv11 PCB Defect Detector

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """联邦学习引擎 — 用户情绪数据联邦聚合
 
 核心思路（EWA-Fed 模式）：

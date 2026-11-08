@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """Improve a skill description based on eval results.
 
 Takes eval results (from run_eval.py) and generates an improved description

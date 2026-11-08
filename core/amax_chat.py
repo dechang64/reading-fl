@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Reading-FL 独立 AMAX 客户端 (不依赖 dgy-treehole)
 
 直接读 streamlit secrets (cloud 友好):

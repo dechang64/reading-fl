@@ -1,3 +1,4 @@
+from __future__ import annotations
 """MBTI 数据 — 16种类型的红楼梦映射
 
 原版数据完整移植自 dgy-treehole/index.html
